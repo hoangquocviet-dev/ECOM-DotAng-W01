@@ -11,5 +11,7 @@
         public string Role { get; set; } = "User";
         public bool IsEmailVerified { get; set; } = false;
         public string OtpCode { get; set; }
+        public string? ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordTokenExpiry { get; set; }
     }
 }
