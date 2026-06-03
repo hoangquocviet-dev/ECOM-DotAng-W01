@@ -14,6 +14,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IProductService, phase_1.Services.ProductService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.ICategoryService, phase_1.Services.CategoryService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.ICartService, phase_1.Services.CartService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IOrderService, phase_1.Services.OrderService>();
+builder.Services.AddScoped<ICompanySettingRepository, CompanySettingRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.ICompanySettingService, phase_1.Services.CompanySettingService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IUserService, phase_1.Services.UserService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

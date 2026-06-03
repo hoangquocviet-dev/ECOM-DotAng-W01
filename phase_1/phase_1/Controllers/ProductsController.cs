@@ -16,6 +16,19 @@ namespace phase_1.Controllers
             _productService = productService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetProductsPagedAsync(
+            [FromQuery] int pageNumber = 1, 
+            [FromQuery] int pageSize = 10, 
+            [FromQuery] int? categoryId = null, 
+            [FromQuery] decimal? minPrice = null, 
+            [FromQuery] decimal? maxPrice = null, 
+            [FromQuery] string keyword = "")
+        {
+            var result = await _productService.GetProductsPagedAsync(pageNumber, pageSize, categoryId, minPrice, maxPrice, keyword);
+            return Ok(result);
+        }
+
         [HttpGet("top3/{category}")]
         public async Task<IActionResult> GetTop3ByCategoryAsync([FromRoute] string category)
         {

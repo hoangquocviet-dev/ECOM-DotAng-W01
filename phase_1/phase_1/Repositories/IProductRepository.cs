@@ -1,4 +1,4 @@
-﻿using phase_1.Models;
+using phase_1.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,5 +14,6 @@ namespace phase_1.Repositories
         Task<IEnumerable<Product>> SearchProductsAsync(string keyword);
         Task<IEnumerable<Product>> GetTop3HighestPricedByCategoryAsync(string category);
         Task<IEnumerable<CategoryTotal>> GetTotalPriceByCategoryAsync();
+        Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "");
     }
 }

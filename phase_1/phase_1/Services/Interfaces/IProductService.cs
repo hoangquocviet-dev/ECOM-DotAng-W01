@@ -14,5 +14,6 @@ namespace phase_1.Services.Interfaces
         Task<Product> UpdateProductAsync(Product newProduct);
 
         Task<Product> DeleteProductAsync(int id); 
+        Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "");
     }
 }
