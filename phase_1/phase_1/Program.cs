@@ -24,6 +24,12 @@ builder.Services.AddScoped<ICompanySettingRepository, CompanySettingRepository>(
 builder.Services.AddScoped<phase_1.Services.Interfaces.ICompanySettingService, phase_1.Services.CompanySettingService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IUserService, phase_1.Services.UserService>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IDashboardService, phase_1.Services.DashboardService>();
+builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IWishlistService, phase_1.Services.WishlistService>();
+builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IReviewService, phase_1.Services.ReviewService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

@@ -1,24 +1,44 @@
-﻿using System.Net;
+using Microsoft.Extensions.Configuration;
+using System.Net;
 using System.Net.Mail;
 
-public class EmailService
+namespace phase_1.Services
 {
-    public void SendVerificationEmail(string toEmail, string otpCode)
+    public class EmailService
     {
-        var smtpClient = new SmtpClient("smtp.gmail.com")
+        private readonly IConfiguration _configuration;
+
+        public EmailService(IConfiguration configuration)
         {
-            Port = 587,
-            Credentials = new NetworkCredential("giangdtph40542@gmail.com", "tfxpokeasdsmwijx"),
-            EnableSsl = true,
-        };
-        var mailMessage = new MailMessage
+            _configuration = configuration;
+        }
+
+        public void SendVerificationEmail(string toEmail, string otpCode)
         {
-            From = new MailAddress("giangdtph40542@gmail.com"),
-            Subject = "Xác thực tài khoản của bạn",
-            Body = $"Chào bạn, mã OTP xác thực tài khoản của bạn là: {otpCode}",
-            IsBodyHtml = true,
-        };
-        mailMessage.To.Add(toEmail);
-        smtpClient.Send(mailMessage);
+            var emailSettings = _configuration.GetSection("EmailSettings");
+            var smtpServer = emailSettings["SmtpServer"];
+            var smtpPort = int.Parse(emailSettings["SmtpPort"] ?? "587");
+            var senderEmail = emailSettings["SenderEmail"];
+            var senderPassword = emailSettings["SenderPassword"];
+            var senderName = emailSettings["SenderName"];
+
+            var smtpClient = new SmtpClient(smtpServer)
+            {
+                Port = smtpPort,
+                Credentials = new NetworkCredential(senderEmail, senderPassword),
+                EnableSsl = true,
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(senderEmail!, senderName),
+                Subject = "Xác thực tài khoản của bạn",
+                Body = $"Chào bạn, mã OTP xác thực tài khoản của bạn là: <strong>{otpCode}</strong>",
+                IsBodyHtml = true,
+            };
+
+            mailMessage.To.Add(toEmail);
+            smtpClient.Send(mailMessage);
+        }
     }
 }

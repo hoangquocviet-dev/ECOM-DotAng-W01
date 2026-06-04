@@ -8,5 +8,7 @@ namespace phase_1.Services.Interfaces
     {
         Task<Order?> CheckoutAsync(int userId, string shippingAddress);
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
+        Task<IEnumerable<Order>> GetAllOrdersAsync();
+        Task<Order?> UpdateOrderStatusAsync(int orderId, string newStatus);
     }
 }

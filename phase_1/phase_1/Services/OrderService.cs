@@ -74,5 +74,23 @@ namespace phase_1.Services
         {
             return await _orderRepository.GetOrdersByUserIdAsync(userId);
         }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
+        {
+            return await _orderRepository.GetAllOrdersAsync();
+        }
+
+        public async Task<Order?> UpdateOrderStatusAsync(int orderId, string newStatus)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.Status = newStatus;
+            await _orderRepository.UpdateOrderAsync(order);
+            return order;
+        }
     }
 }

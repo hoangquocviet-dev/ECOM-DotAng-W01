@@ -48,5 +48,31 @@ namespace phase_1.Controllers
             var orders = await _orderService.GetOrdersByUserIdAsync(userId);
             return Ok(orders);
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrdersAsync()
+        {
+            var orders = await _orderService.GetAllOrdersAsync();
+            return Ok(orders);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateOrderStatusAsync(int id, [FromBody] UpdateOrderStatusRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var order = await _orderService.UpdateOrderStatusAsync(id, request.Status);
+            if (order == null)
+            {
+                return NotFound($"Order with ID {id} not found.");
+            }
+
+            return Ok(order);
+        }
     }
 }
