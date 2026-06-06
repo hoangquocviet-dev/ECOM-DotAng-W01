@@ -14,6 +14,11 @@ namespace phase_1.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Users>> GetAllUsersAsync()
+        {
+            return await _context.Users.ToListAsync();
+        }
+
         public async Task<Users?> GetUserByIdAsync(int userId)
         {
             return await _context.Users.FindAsync(userId);

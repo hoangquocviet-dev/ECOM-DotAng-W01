@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using phase_1.DTOs;
 using phase_1.Services.Interfaces;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -75,6 +76,48 @@ namespace phase_1.Controllers
             if (!success) return BadRequest("Mật khẩu cũ không chính xác hoặc người dùng không tồn tại.");
 
             return Ok("Đổi mật khẩu thành công.");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsersAsync()
+        {
+            var users = await _userService.GetAllUsersAsync();
+            var response = users.Select(u => new
+            {
+                u.Id,
+                u.Username,
+                u.Email,
+                u.Name,
+                u.PhoneNumber,
+                u.Address,
+                u.Role,
+                u.IsEmailVerified,
+                u.IsLocked
+            });
+            return Ok(response);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/lock")]
+        public async Task<IActionResult> LockUnlockUserAsync(int id, [FromBody] LockUnlockUserRequest request)
+        {
+            var success = await _userService.LockUnlockUserAsync(id, request.IsLocked);
+            if (!success) return NotFound("Không tìm thấy người dùng.");
+
+            return Ok(new { message = request.IsLocked ? "Tài khoản đã bị khóa." : "Tài khoản đã được mở khóa." });
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}/role")]
+        public async Task<IActionResult> ChangeUserRoleAsync(int id, [FromBody] ChangeUserRoleRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Role)) return BadRequest("Role không được để trống.");
+
+            var success = await _userService.ChangeUserRoleAsync(id, request.Role);
+            if (!success) return NotFound("Không tìm thấy người dùng.");
+
+            return Ok(new { message = $"Phân quyền thành công. Quyền mới: {request.Role}" });
         }
     }
 }

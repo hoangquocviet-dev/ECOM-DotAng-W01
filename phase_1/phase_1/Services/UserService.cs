@@ -2,6 +2,7 @@ using phase_1.Models;
 using phase_1.DTOs;
 using phase_1.Repositories;
 using phase_1.Services.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 
@@ -74,6 +75,31 @@ namespace phase_1.Services
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
             user.OtpCode = string.Empty; // clear otp after success
             
+            await _userRepository.UpdateUserAsync(user);
+            return true;
+        }
+
+        public async Task<IEnumerable<Users>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersAsync();
+        }
+
+        public async Task<bool> LockUnlockUserAsync(int userId, bool isLocked)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null) return false;
+
+            user.IsLocked = isLocked;
+            await _userRepository.UpdateUserAsync(user);
+            return true;
+        }
+
+        public async Task<bool> ChangeUserRoleAsync(int userId, string newRole)
+        {
+            var user = await _userRepository.GetUserByIdAsync(userId);
+            if (user == null) return false;
+
+            user.Role = newRole;
             await _userRepository.UpdateUserAsync(user);
             return true;
         }

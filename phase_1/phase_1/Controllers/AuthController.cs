@@ -60,6 +60,10 @@ namespace phase_1.Controllers
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == request.Username);
             if (user != null && BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
+                if (user.IsLocked)
+                {
+                    return Unauthorized("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin.");
+                }
                 if (user.IsEmailVerified == false)
                 {
                     return Unauthorized("Please verify your email with the OTP code before logging in.");
