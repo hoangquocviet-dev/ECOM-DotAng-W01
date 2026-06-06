@@ -13,10 +13,12 @@ namespace phase_1.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IMomoService _momoService;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, IMomoService momoService)
         {
             _orderService = orderService;
+            _momoService = momoService;
         }
 
         private int GetUserId()
@@ -35,12 +37,19 @@ namespace phase_1.Controllers
             try
             {
                 int userId = GetUserId();
-                var order = await _orderService.CheckoutAsync(userId, request.ShippingAddress, request.VoucherCode);
+                var order = await _orderService.CheckoutAsync(userId, request.ShippingAddress, request.PaymentMethod, request.VoucherCode);
                 if (order == null)
                 {
                     return BadRequest("Cart is empty or invalid.");
                 }
-                return Ok(order);
+                
+                if (request.PaymentMethod == "MoMo")
+                {
+                    var paymentUrl = await _momoService.CreatePaymentUrl(order);
+                    return Ok(new { order, paymentUrl });
+                }
+
+                return Ok(new { order, paymentUrl = "" });
             }
             catch (System.ArgumentException ex)
             {
@@ -80,6 +89,25 @@ namespace phase_1.Controllers
             }
 
             return Ok(order);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("momo-return")]
+        public IActionResult MomoReturn([FromQuery] string partnerCode, [FromQuery] string orderId, [FromQuery] string requestId, [FromQuery] string amount, [FromQuery] string orderInfo, [FromQuery] string orderType, [FromQuery] string transId, [FromQuery] string resultCode, [FromQuery] string message, [FromQuery] string payType, [FromQuery] string responseTime, [FromQuery] string extraData, [FromQuery] string signature)
+        {
+            if (resultCode == "0")
+            {
+                return Ok(new { message = "Thanh toán thành công qua MoMo", orderId });
+            }
+            return BadRequest(new { message = "Thanh toán thất bại", orderId });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("momo-notify")]
+        public IActionResult MomoNotify([FromBody] object ipnData)
+        {
+            // In a real application, we would validate signature and update payment status here
+            return NoContent();
         }
     }
 }

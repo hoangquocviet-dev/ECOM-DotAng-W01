@@ -22,7 +22,7 @@ namespace phase_1.Services
             _voucherRepository = voucherRepository;
         }
 
-        public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string? voucherCode = null)
+        public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string paymentMethod, string? voucherCode = null)
         {
             var cart = await _cartRepository.GetCartByUserIdAsync(userId);
             if (cart == null || !cart.CartItems.Any())
@@ -36,7 +36,9 @@ namespace phase_1.Services
                 ShippingAddress = shippingAddress,
                 OrderDate = DateTime.UtcNow,
                 Status = "Pending",
-                TotalAmount = 0
+                TotalAmount = 0,
+                PaymentMethod = paymentMethod,
+                PaymentStatus = "Pending"
             };
 
             foreach (var item in cart.CartItems)
