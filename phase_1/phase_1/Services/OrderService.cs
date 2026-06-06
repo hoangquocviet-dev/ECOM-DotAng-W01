@@ -12,15 +12,17 @@ namespace phase_1.Services
         private readonly IOrderRepository _orderRepository;
         private readonly ICartRepository _cartRepository;
         private readonly IProductRepository _productRepository;
+        private readonly IVoucherRepository _voucherRepository;
 
-        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository)
+        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository)
         {
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
             _productRepository = productRepository;
+            _voucherRepository = voucherRepository;
         }
 
-        public async Task<Order?> CheckoutAsync(int userId, string shippingAddress)
+        public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string? voucherCode = null)
         {
             var cart = await _cartRepository.GetCartByUserIdAsync(userId);
             if (cart == null || !cart.CartItems.Any())
@@ -56,6 +58,27 @@ namespace phase_1.Services
                     };
                     order.OrderDetails.Add(orderDetail);
                     order.TotalAmount += (orderDetail.Quantity * orderDetail.UnitPrice);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(voucherCode))
+            {
+                var voucher = await _voucherRepository.GetVoucherByCodeAsync(voucherCode);
+                if (voucher != null && voucher.ExpiryDate > DateTime.UtcNow && voucher.UsedCount < voucher.UsageLimit)
+                {
+                    order.VoucherId = voucher.Id;
+                    order.DiscountAmount = voucher.DiscountAmount;
+                    order.TotalAmount -= voucher.DiscountAmount;
+                    if (order.TotalAmount < 0) order.TotalAmount = 0;
+
+                    voucher.UsedCount++;
+                    await _voucherRepository.UpdateVoucherAsync(voucher);
+                }
+                else
+                {
+                    // Invalid or expired voucher, but for simplicity we can either throw exception or just not apply it.
+                    // We'll just throw an ArgumentException to be handled by controller, or just ignore.
+                    throw new ArgumentException("Mã giảm giá không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.");
                 }
             }
 

@@ -16,6 +16,11 @@ namespace phase_1.Models
         public string Status { get; set; } = "Pending";
         public string ShippingAddress { get; set; } = string.Empty;
 
+        public decimal DiscountAmount { get; set; } = 0;
+        public int? VoucherId { get; set; }
+        [JsonIgnore]
+        public Voucher? Voucher { get; set; }
+
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 }

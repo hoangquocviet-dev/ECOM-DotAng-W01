@@ -32,13 +32,20 @@ namespace phase_1.Controllers
         [HttpPost("checkout")]
         public async Task<IActionResult> CheckoutAsync([FromBody] CheckoutRequest request)
         {
-            int userId = GetUserId();
-            var order = await _orderService.CheckoutAsync(userId, request.ShippingAddress);
-            if (order == null)
+            try
             {
-                return BadRequest("Cart is empty or invalid.");
+                int userId = GetUserId();
+                var order = await _orderService.CheckoutAsync(userId, request.ShippingAddress, request.VoucherCode);
+                if (order == null)
+                {
+                    return BadRequest("Cart is empty or invalid.");
+                }
+                return Ok(order);
             }
-            return Ok(order);
+            catch (System.ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("history")]

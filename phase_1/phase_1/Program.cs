@@ -30,6 +30,8 @@ builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IWishlistService, phase_1.Services.WishlistService>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IReviewService, phase_1.Services.ReviewService>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IVoucherService, phase_1.Services.VoucherService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
