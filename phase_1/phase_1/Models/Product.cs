@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace phase_1.Models
@@ -11,7 +12,11 @@ namespace phase_1.Models
         public string ImageUrl { get; set; } = string.Empty;
         
         public int CategoryId { get; set; }
-        
         public Category? Category { get; set; }
+
+        public int? BrandId { get; set; }
+        public Brand? Brand { get; set; }
+
+        public ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
     }
 }

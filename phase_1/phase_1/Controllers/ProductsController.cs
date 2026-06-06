@@ -21,11 +21,12 @@ namespace phase_1.Controllers
             [FromQuery] int pageNumber = 1, 
             [FromQuery] int pageSize = 10, 
             [FromQuery] int? categoryId = null, 
+            [FromQuery] int? brandId = null,
             [FromQuery] decimal? minPrice = null, 
             [FromQuery] decimal? maxPrice = null, 
             [FromQuery] string keyword = "")
         {
-            var result = await _productService.GetProductsPagedAsync(pageNumber, pageSize, categoryId, minPrice, maxPrice, keyword);
+            var result = await _productService.GetProductsPagedAsync(pageNumber, pageSize, categoryId, brandId, minPrice, maxPrice, keyword);
             return Ok(result);
         }
 

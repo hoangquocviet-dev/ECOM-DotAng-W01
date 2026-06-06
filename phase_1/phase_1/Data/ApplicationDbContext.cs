@@ -19,6 +19,8 @@ namespace phase_1.Data
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -26,6 +28,16 @@ namespace phase_1.Data
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Brand)
+                .WithMany(b => b.Products)
+                .HasForeignKey(p => p.BrandId);
+
+            modelBuilder.Entity<ProductImage>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(pi => pi.ProductId);
 
             modelBuilder.Entity<Cart>()
                 .HasOne(c => c.User)

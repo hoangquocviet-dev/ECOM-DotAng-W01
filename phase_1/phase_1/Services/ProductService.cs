@@ -52,9 +52,9 @@ namespace phase_1.Services
             return await _productRepository.GetTotalPriceByCategoryAsync();
         }
 
-        public async Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "")
+        public async Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "")
         {
-            return await _productRepository.GetProductsPagedAsync(pageNumber, pageSize, categoryId, minPrice, maxPrice, keyword);
+            return await _productRepository.GetProductsPagedAsync(pageNumber, pageSize, categoryId, brandId, minPrice, maxPrice, keyword);
         }
     }
 }

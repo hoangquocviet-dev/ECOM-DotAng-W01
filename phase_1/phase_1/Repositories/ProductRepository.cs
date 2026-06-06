@@ -71,12 +71,19 @@ namespace phase_1.Repositories
                 .ToListAsync();
         }
 
-        public async Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "")
+        public async Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "")
         {
-            var query = _context.Products.Include(p => p.Category).AsQueryable();
+            var query = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .AsQueryable();
 
             if (categoryId.HasValue)
                 query = query.Where(p => p.CategoryId == categoryId.Value);
+
+            if (brandId.HasValue)
+                query = query.Where(p => p.BrandId == brandId.Value);
 
             if (minPrice.HasValue)
                 query = query.Where(p => p.Price >= minPrice.Value);
