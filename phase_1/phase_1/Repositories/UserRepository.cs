@@ -1,6 +1,7 @@
 using phase_1.Data;
 using phase_1.Models;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace phase_1.Repositories
 {
@@ -16,6 +17,11 @@ namespace phase_1.Repositories
         public async Task<Users?> GetUserByIdAsync(int userId)
         {
             return await _context.Users.FindAsync(userId);
+        }
+
+        public async Task<Users?> GetUserByEmailAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task UpdateUserAsync(Users user)

@@ -6,6 +6,7 @@ namespace phase_1.Repositories
     public interface IUserRepository
     {
         Task<Users?> GetUserByIdAsync(int userId);
+        Task<Users?> GetUserByEmailAsync(string email);
         Task UpdateUserAsync(Users user);
     }
 }

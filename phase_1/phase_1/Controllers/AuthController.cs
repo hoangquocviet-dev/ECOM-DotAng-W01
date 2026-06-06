@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using phase_1.Services;
+using phase_1.Services.Interfaces;
 
 namespace phase_1.Controllers
 {
@@ -19,11 +20,14 @@ namespace phase_1.Controllers
         private readonly IConfiguration _configuration;
         private readonly ApplicationDbContext _context;
         private readonly EmailService _emailService;
-        public AuthController(IConfiguration configuration, ApplicationDbContext context, EmailService emailService)
+        private readonly IUserService _userService;
+
+        public AuthController(IConfiguration configuration, ApplicationDbContext context, EmailService emailService, IUserService userService)
         {
             _configuration = configuration;
             _context = context;
             _emailService = emailService;
+            _userService = userService;
         }
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
@@ -101,6 +105,22 @@ namespace phase_1.Controllers
                 return Ok("OTP verified successfully!");
             }
             return BadRequest("Invalid OTP or email.");
+        }
+
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var success = await _userService.ForgotPasswordAsync(request);
+            if (!success) return BadRequest("Email không tồn tại trong hệ thống.");
+            return Ok("Mã OTP đã được gửi đến email của bạn.");
+        }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequest request)
+        {
+            var success = await _userService.ResetPasswordAsync(request);
+            if (!success) return BadRequest("OTP không hợp lệ hoặc email không tồn tại.");
+            return Ok("Đặt lại mật khẩu thành công.");
         }
     }
 }

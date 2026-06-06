@@ -66,5 +66,15 @@ namespace phase_1.Controllers
                 user.Role
             });
         }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest request)
+        {
+            int userId = GetUserId();
+            var success = await _userService.ChangePasswordAsync(userId, request);
+            if (!success) return BadRequest("Mật khẩu cũ không chính xác hoặc người dùng không tồn tại.");
+
+            return Ok("Đổi mật khẩu thành công.");
+        }
     }
 }
