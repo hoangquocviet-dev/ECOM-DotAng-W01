@@ -23,6 +23,8 @@ namespace phase_1.Data
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<ReturnRequest> ReturnRequests { get; set; }
+        public DbSet<Combo> Combos { get; set; }
+        public DbSet<ComboItem> ComboItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -101,6 +103,18 @@ namespace phase_1.Data
                 .HasOne(r => r.Order)
                 .WithMany()
                 .HasForeignKey(r => r.OrderId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ComboItem>()
+                .HasOne(ci => ci.Combo)
+                .WithMany(c => c.ComboItems)
+                .HasForeignKey(ci => ci.ComboId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ComboItem>()
+                .HasOne(ci => ci.Product)
+                .WithMany()
+                .HasForeignKey(ci => ci.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);

@@ -41,6 +41,8 @@ builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IBlogService, phase_1.Services.BlogService>();
 builder.Services.AddScoped<IReturnRequestRepository, ReturnRequestRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IReturnRequestService, phase_1.Services.ReturnRequestService>();
+builder.Services.AddScoped<IComboRepository, ComboRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IComboService, phase_1.Services.ComboService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
