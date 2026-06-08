@@ -117,5 +117,24 @@ namespace phase_1.Services
             await _orderRepository.UpdateOrderAsync(order);
             return order;
         }
+
+        public async Task<Order?> UpdatePaymentStatusAsync(int orderId, string paymentStatus)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null)
+            {
+                return null;
+            }
+
+            order.PaymentStatus = paymentStatus;
+            // If payment is successful, we might also update the main Status to Processing or similar.
+            if (paymentStatus == "Paid")
+            {
+                order.Status = "Processing";
+            }
+            
+            await _orderRepository.UpdateOrderAsync(order);
+            return order;
+        }
     }
 }

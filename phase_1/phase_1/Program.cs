@@ -37,6 +37,8 @@ builder.Services.AddScoped<phase_1.Services.Interfaces.IBrandService, phase_1.Se
 builder.Services.AddScoped<IProductImageRepository, ProductImageRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IProductImageService, phase_1.Services.ProductImageService>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IMomoService, phase_1.Services.MomoService>();
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IBlogService, phase_1.Services.BlogService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

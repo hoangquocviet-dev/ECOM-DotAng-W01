@@ -10,5 +10,6 @@ namespace phase_1.Services.Interfaces
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
         Task<IEnumerable<Order>> GetAllOrdersAsync();
         Task<Order?> UpdateOrderStatusAsync(int orderId, string newStatus);
+        Task<Order?> UpdatePaymentStatusAsync(int orderId, string paymentStatus);
     }
 }

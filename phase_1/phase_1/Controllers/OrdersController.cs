@@ -93,21 +93,79 @@ namespace phase_1.Controllers
 
         [AllowAnonymous]
         [HttpGet("momo-return")]
-        public IActionResult MomoReturn([FromQuery] string partnerCode, [FromQuery] string orderId, [FromQuery] string requestId, [FromQuery] string amount, [FromQuery] string orderInfo, [FromQuery] string orderType, [FromQuery] string transId, [FromQuery] string resultCode, [FromQuery] string message, [FromQuery] string payType, [FromQuery] string responseTime, [FromQuery] string extraData, [FromQuery] string signature)
+        public async Task<IActionResult> MomoReturn([FromQuery] string partnerCode, [FromQuery] string orderId, [FromQuery] string requestId, [FromQuery] string amount, [FromQuery] string orderInfo, [FromQuery] string orderType, [FromQuery] string transId, [FromQuery] string resultCode, [FromQuery] string message, [FromQuery] string payType, [FromQuery] string responseTime, [FromQuery] string extraData, [FromQuery] string signature)
         {
-            if (resultCode == "0")
+            try
             {
-                return Ok(new { message = "Thanh toán thành công qua MoMo", orderId });
+                var isValid = _momoService.ValidateSignature(partnerCode, orderId, requestId, long.Parse(amount), orderInfo, orderType, long.Parse(transId), int.Parse(resultCode), message, payType, long.Parse(responseTime), extraData, signature);
+                
+                if (isValid)
+                {
+                    if (resultCode == "0")
+                    {
+                        var realOrderIdString = orderId.Split('_')[0];
+                        if (int.TryParse(realOrderIdString, out int id))
+                        {
+                            await _orderService.UpdatePaymentStatusAsync(id, "Paid");
+                        }
+                        return Ok(new { message = "Thanh toán thành công qua MoMo", orderId });
+                    }
+                    else
+                    {
+                        var realOrderIdString = orderId.Split('_')[0];
+                        if (int.TryParse(realOrderIdString, out int id))
+                        {
+                            await _orderService.UpdatePaymentStatusAsync(id, "Failed");
+                        }
+                        return BadRequest(new { message = "Thanh toán thất bại", orderId });
+                    }
+                }
+                
+                return BadRequest(new { message = "Invalid signature" });
             }
-            return BadRequest(new { message = "Thanh toán thất bại", orderId });
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error processing request", details = ex.Message });
+            }
         }
 
         [AllowAnonymous]
         [HttpPost("momo-notify")]
-        public IActionResult MomoNotify([FromBody] object ipnData)
+        public async Task<IActionResult> MomoNotify([FromBody] MomoIpnRequest ipnData)
         {
-            // In a real application, we would validate signature and update payment status here
-            return NoContent();
+            try
+            {
+                var isValid = _momoService.ValidateSignature(
+                    ipnData.partnerCode, ipnData.orderId, ipnData.requestId, ipnData.amount, 
+                    ipnData.orderInfo, ipnData.orderType, ipnData.transId, ipnData.resultCode, 
+                    ipnData.message, ipnData.payType, ipnData.responseTime, ipnData.extraData, 
+                    ipnData.signature);
+
+                if (isValid)
+                {
+                    var realOrderIdString = ipnData.orderId.Split('_')[0];
+                    if (int.TryParse(realOrderIdString, out int id))
+                    {
+                        if (ipnData.resultCode == 0)
+                        {
+                            await _orderService.UpdatePaymentStatusAsync(id, "Paid");
+                        }
+                        else
+                        {
+                            await _orderService.UpdatePaymentStatusAsync(id, "Failed");
+                        }
+                    }
+                    return NoContent();
+                }
+
+                return BadRequest(new { message = "Invalid signature" });
+            }
+            catch (System.Exception)
+            {
+                // Typically we return 204 NoContent for IPN to acknowledge receipt even if error, 
+                // but we might log it.
+                return NoContent();
+            }
         }
     }
 }

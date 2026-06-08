@@ -21,6 +21,7 @@ namespace phase_1.Data
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Blog> Blogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

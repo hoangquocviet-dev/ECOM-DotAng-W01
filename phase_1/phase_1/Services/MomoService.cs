@@ -80,5 +80,17 @@ namespace phase_1.Services
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
         }
+
+        public bool ValidateSignature(string partnerCode, string orderId, string requestId, long amount, string orderInfo, string orderType, long transId, int resultCode, string message, string payType, long responseTime, string extraData, string signature)
+        {
+            var accessKey = _config["MoMo:AccessKey"];
+            var secretKey = _config["MoMo:SecretKey"];
+
+            var rawHash = $"accessKey={accessKey}&amount={amount}&extraData={extraData}&message={message}&orderId={orderId}&orderInfo={orderInfo}&orderType={orderType}&partnerCode={partnerCode}&payType={payType}&requestId={requestId}&responseTime={responseTime}&resultCode={resultCode}&transId={transId}";
+            
+            var expectedSignature = ComputeHmacSha256(rawHash, secretKey);
+
+            return signature.Equals(expectedSignature, StringComparison.OrdinalIgnoreCase);
+        }
     }
 }
