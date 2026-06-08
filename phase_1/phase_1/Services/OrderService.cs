@@ -13,13 +13,15 @@ namespace phase_1.Services
         private readonly ICartRepository _cartRepository;
         private readonly IProductRepository _productRepository;
         private readonly IVoucherRepository _voucherRepository;
+        private readonly IUserRepository _userRepository;
 
-        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository)
+        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IUserRepository userRepository)
         {
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
             _productRepository = productRepository;
             _voucherRepository = voucherRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string paymentMethod, string? voucherCode = null)
@@ -78,15 +80,12 @@ namespace phase_1.Services
                 }
                 else
                 {
-                    // Invalid or expired voucher, but for simplicity we can either throw exception or just not apply it.
-                    // We'll just throw an ArgumentException to be handled by controller, or just ignore.
                     throw new ArgumentException("Mã giảm giá không hợp lệ, đã hết hạn hoặc hết lượt sử dụng.");
                 }
             }
 
             var createdOrder = await _orderRepository.CreateOrderAsync(order);
 
-            // Clear Cart
             foreach (var item in cart.CartItems.ToList())
             {
                 await _cartRepository.RemoveCartItemAsync(item);
@@ -113,6 +112,23 @@ namespace phase_1.Services
                 return null;
             }
 
+            if (newStatus == "Completed" && order.Status != "Completed")
+            {
+                var user = await _userRepository.GetUserByIdAsync(order.UserId);
+                if (user != null)
+                {
+                    user.TotalSpent += order.TotalAmount;
+                    user.RewardPoints += (int)(order.TotalAmount / 100); 
+                    
+                    if (user.TotalSpent >= 10000000) user.MemberTier = "VIP";
+                    else if (user.TotalSpent >= 5000000) user.MemberTier = "Gold";
+                    else if (user.TotalSpent >= 2000000) user.MemberTier = "Silver";
+                    else user.MemberTier = "Bronze";
+
+                    await _userRepository.UpdateUserAsync(user);
+                }
+            }
+
             order.Status = newStatus;
             await _orderRepository.UpdateOrderAsync(order);
             return order;
@@ -127,7 +143,6 @@ namespace phase_1.Services
             }
 
             order.PaymentStatus = paymentStatus;
-            // If payment is successful, we might also update the main Status to Processing or similar.
             if (paymentStatus == "Paid")
             {
                 order.Status = "Processing";

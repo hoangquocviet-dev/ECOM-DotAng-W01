@@ -15,5 +15,8 @@ namespace phase_1.Models
         public string OtpCode { get; set; }
         public string? ResetPasswordToken { get; set; }
         public DateTime? ResetPasswordTokenExpiry { get; set; }
+        public decimal TotalSpent { get; set; } = 0;
+        public int RewardPoints { get; set; } = 0;
+        public string MemberTier { get; set; } = "Bronze";
     }
 }

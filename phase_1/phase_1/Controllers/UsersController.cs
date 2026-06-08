@@ -45,7 +45,10 @@ namespace phase_1.Controllers
                 user.Name,
                 user.PhoneNumber,
                 user.Address,
-                user.Role
+                user.Role,
+                user.TotalSpent,
+                user.RewardPoints,
+                user.MemberTier
             });
         }
 
@@ -64,7 +67,10 @@ namespace phase_1.Controllers
                 user.Name,
                 user.PhoneNumber,
                 user.Address,
-                user.Role
+                user.Role,
+                user.TotalSpent,
+                user.RewardPoints,
+                user.MemberTier
             });
         }
 
@@ -93,7 +99,10 @@ namespace phase_1.Controllers
                 u.Address,
                 u.Role,
                 u.IsEmailVerified,
-                u.IsLocked
+                u.IsLocked,
+                u.TotalSpent,
+                u.RewardPoints,
+                u.MemberTier
             });
             return Ok(response);
         }
