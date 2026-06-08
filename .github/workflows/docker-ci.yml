@@ -20,6 +20,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./phase_1
-          file: ./phase_1/Dockerfile
+          file: ./phase_1/phase_1/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/phase1-api:latest
