@@ -15,5 +15,6 @@ namespace phase_1.Repositories
         Task<IEnumerable<Product>> GetTop3HighestPricedByCategoryAsync(string category);
         Task<IEnumerable<CategoryTotal>> GetTotalPriceByCategoryAsync();
         Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "");
+        Task<IEnumerable<Product>> GetFrequentlyBoughtTogetherAsync(int productId, int limit = 5);
     }
 }

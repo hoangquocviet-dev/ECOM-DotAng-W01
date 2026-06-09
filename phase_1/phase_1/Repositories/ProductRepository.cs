@@ -109,5 +109,27 @@ namespace phase_1.Repositories
                 Items = items
             };
         }
+
+        public async Task<IEnumerable<Product>> GetFrequentlyBoughtTogetherAsync(int productId, int limit = 5)
+        {
+            var relatedProductIds = await _context.OrderDetails
+                .Where(od => _context.OrderDetails
+                    .Where(o => o.ProductId == productId)
+                    .Select(o => o.OrderId)
+                    .Contains(od.OrderId)
+                    && od.ProductId != productId)
+                .GroupBy(od => od.ProductId)
+                .OrderByDescending(g => g.Count())
+                .Select(g => g.Key)
+                .Take(limit)
+                .ToListAsync();
+
+            return await _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Include(p => p.ProductImages)
+                .Where(p => relatedProductIds.Contains(p.Id))
+                .ToListAsync();
+        }
     }
 }

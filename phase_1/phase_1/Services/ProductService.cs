@@ -56,5 +56,10 @@ namespace phase_1.Services
         {
             return await _productRepository.GetProductsPagedAsync(pageNumber, pageSize, categoryId, brandId, minPrice, maxPrice, keyword);
         }
+
+        public async Task<IEnumerable<Product>> GetFrequentlyBoughtTogetherAsync(int productId, int limit = 5)
+        {
+            return await _productRepository.GetFrequentlyBoughtTogetherAsync(productId, limit);
+        }
     }
 }

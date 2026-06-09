@@ -79,5 +79,12 @@ namespace phase_1.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("{id}/frequently-bought-together")]
+        public async Task<IActionResult> GetFrequentlyBoughtTogetherAsync([FromRoute] int id, [FromQuery] int limit = 5)
+        {
+            var result = await _productService.GetFrequentlyBoughtTogetherAsync(id, limit);
+            return Ok(result);
+        }
     } 
 }
