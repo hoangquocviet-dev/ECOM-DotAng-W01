@@ -45,6 +45,7 @@ builder.Services.AddScoped<IComboRepository, ComboRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IComboService, phase_1.Services.ComboService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -112,5 +113,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<phase_1.Hubs.NotificationHub>("/hubs/notification");
 
 app.Run();

@@ -4,16 +4,20 @@ using phase_1.Repositories;
 using phase_1.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using phase_1.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace phase_1.Services
 {
     public class VoucherService : IVoucherService
     {
         private readonly IVoucherRepository _voucherRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public VoucherService(IVoucherRepository voucherRepository)
+        public VoucherService(IVoucherRepository voucherRepository, IHubContext<NotificationHub> hubContext)
         {
             _voucherRepository = voucherRepository;
+            _hubContext = hubContext;
         }
 
         public async Task<IEnumerable<Voucher>> GetAllVouchersAsync()
@@ -43,6 +47,9 @@ namespace phase_1.Services
             };
 
             await _voucherRepository.AddVoucherAsync(voucher);
+
+            await _hubContext.Clients.All.SendAsync("ReceiveNewPromotion", voucher.Code, voucher.DiscountAmount);
+
             return voucher;
         }
 

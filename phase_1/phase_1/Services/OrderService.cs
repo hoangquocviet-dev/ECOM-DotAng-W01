@@ -5,6 +5,9 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
+using phase_1.Hubs;
+using Microsoft.AspNetCore.SignalR;
+
 namespace phase_1.Services
 {
     public class OrderService : IOrderService
@@ -14,14 +17,16 @@ namespace phase_1.Services
         private readonly IProductRepository _productRepository;
         private readonly IVoucherRepository _voucherRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IUserRepository userRepository)
+        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext)
         {
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
             _productRepository = productRepository;
             _voucherRepository = voucherRepository;
             _userRepository = userRepository;
+            _hubContext = hubContext;
         }
 
         public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string paymentMethod, string? voucherCode = null)
@@ -131,6 +136,9 @@ namespace phase_1.Services
 
             order.Status = newStatus;
             await _orderRepository.UpdateOrderAsync(order);
+            
+            await _hubContext.Clients.All.SendAsync("ReceiveOrderStatusUpdate", order.Id, order.Status, order.UserId);
+
             return order;
         }
 
