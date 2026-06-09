@@ -12,5 +12,7 @@ namespace phase_1.Repositories
         Task AddCartItemAsync(CartItem item);
         Task UpdateCartItemAsync(CartItem item);
         Task RemoveCartItemAsync(CartItem item);
+        Task UpdateCartAsync(Cart cart);
+        Task<System.Collections.Generic.IEnumerable<Cart>> GetAbandonedCartsAsync(System.DateTime thresholdDate);
     }
 }

@@ -57,5 +57,21 @@ namespace phase_1.Repositories
             _context.CartItems.Remove(item);
             await _context.SaveChangesAsync();
         }
+
+        public async Task UpdateCartAsync(Cart cart)
+        {
+            _context.Carts.Update(cart);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<System.Collections.Generic.IEnumerable<Cart>> GetAbandonedCartsAsync(System.DateTime thresholdDate)
+        {
+            return await _context.Carts
+                .Include(c => c.User)
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .Where(c => c.CartItems.Any() && c.UpdatedAt < thresholdDate && !c.IsReminderSent)
+                .ToListAsync();
+        }
     }
 }

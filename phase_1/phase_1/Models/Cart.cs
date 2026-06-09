@@ -11,5 +11,7 @@ namespace phase_1.Models
         public Users? User { get; set; }
         
         public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public bool IsReminderSent { get; set; } = false;
     }
 }

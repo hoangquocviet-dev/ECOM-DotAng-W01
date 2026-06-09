@@ -44,6 +44,10 @@ namespace phase_1.Services
                 };
                 await _cartRepository.AddCartItemAsync(newItem);
             }
+            cart.UpdatedAt = System.DateTime.UtcNow;
+            cart.IsReminderSent = false;
+            await _cartRepository.UpdateCartAsync(cart);
+
             return await _cartRepository.GetCartByUserIdAsync(userId) ?? cart;
         }
 
@@ -56,6 +60,10 @@ namespace phase_1.Services
             {
                 item.Quantity = quantity;
                 await _cartRepository.UpdateCartItemAsync(item);
+                
+                cart.UpdatedAt = System.DateTime.UtcNow;
+                cart.IsReminderSent = false;
+                await _cartRepository.UpdateCartAsync(cart);
             }
             return await _cartRepository.GetCartByUserIdAsync(userId) ?? cart;
         }
@@ -68,6 +76,10 @@ namespace phase_1.Services
             if (item != null && item.CartId == cart.Id)
             {
                 await _cartRepository.RemoveCartItemAsync(item);
+                
+                cart.UpdatedAt = System.DateTime.UtcNow;
+                cart.IsReminderSent = false;
+                await _cartRepository.UpdateCartAsync(cart);
             }
             return await _cartRepository.GetCartByUserIdAsync(userId) ?? cart;
         }

@@ -44,6 +44,7 @@ builder.Services.AddScoped<phase_1.Services.Interfaces.IReturnRequestService, ph
 builder.Services.AddScoped<IComboRepository, ComboRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IComboService, phase_1.Services.ComboService>();
 builder.Services.AddScoped<EmailService>();
+builder.Services.AddHostedService<phase_1.Services.AbandonedCartHostedService>();
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
