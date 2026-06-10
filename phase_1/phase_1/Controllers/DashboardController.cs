@@ -30,5 +30,12 @@ namespace phase_1.Controllers
             var topProducts = await _dashboardService.GetTopSellingProductsAsync(top);
             return Ok(topProducts);
         }
+
+        [HttpGet("revenue-chart")]
+        public async Task<IActionResult> GetRevenueChartAsync([FromQuery] string period = "day")
+        {
+            var data = await _dashboardService.GetRevenueChartAsync(period);
+            return Ok(data);
+        }
     }
 }

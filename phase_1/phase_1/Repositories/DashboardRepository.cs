@@ -51,5 +51,53 @@ namespace phase_1.Repositories
 
             return query;
         }
+
+        public async Task<IEnumerable<RevenueDataPointDto>> GetRevenueChartAsync(string period)
+        {
+            var orders = await _context.Orders
+                .Where(o => o.Status != "Cancelled")
+                .ToListAsync();
+
+            if (string.Equals(period, "month", System.StringComparison.OrdinalIgnoreCase))
+            {
+                return orders
+                    .GroupBy(o => new { o.OrderDate.Year, o.OrderDate.Month })
+                    .Select(g => new RevenueDataPointDto
+                    {
+                        Label = $"{g.Key.Month:D2}/{g.Key.Year}",
+                        Revenue = g.Sum(o => o.TotalAmount)
+                    })
+                    .OrderBy(x => x.Label)
+                    .ToList();
+            }
+            else if (string.Equals(period, "week", System.StringComparison.OrdinalIgnoreCase))
+            {
+                var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+                return orders
+                    .GroupBy(o => new {
+                        o.OrderDate.Year, 
+                        Week = cal.GetWeekOfYear(o.OrderDate, System.Globalization.CalendarWeekRule.FirstFourDayWeek, System.DayOfWeek.Monday)
+                    })
+                    .Select(g => new RevenueDataPointDto
+                    {
+                        Label = $"W{g.Key.Week:D2}/{g.Key.Year}",
+                        Revenue = g.Sum(o => o.TotalAmount)
+                    })
+                    .OrderBy(x => x.Label)
+                    .ToList();
+            }
+            else // day
+            {
+                return orders
+                    .GroupBy(o => o.OrderDate.Date)
+                    .Select(g => new RevenueDataPointDto
+                    {
+                        Label = g.Key.ToString("yyyy-MM-dd"),
+                        Revenue = g.Sum(o => o.TotalAmount)
+                    })
+                    .OrderBy(x => x.Label)
+                    .ToList();
+            }
+        }
     }
 }

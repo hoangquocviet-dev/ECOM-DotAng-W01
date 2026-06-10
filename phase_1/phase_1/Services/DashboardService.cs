@@ -24,5 +24,10 @@ namespace phase_1.Services
         {
             return await _dashboardRepository.GetTopSellingProductsAsync(top);
         }
+
+        public async Task<IEnumerable<RevenueDataPointDto>> GetRevenueChartAsync(string period)
+        {
+            return await _dashboardRepository.GetRevenueChartAsync(period);
+        }
     }
 }
