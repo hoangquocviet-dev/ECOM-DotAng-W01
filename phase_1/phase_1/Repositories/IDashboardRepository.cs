@@ -9,5 +9,6 @@ namespace phase_1.Repositories
         Task<DashboardSummaryDto> GetSummaryAsync();
         Task<IEnumerable<TopSellingProductDto>> GetTopSellingProductsAsync(int top = 5);
         Task<IEnumerable<RevenueDataPointDto>> GetRevenueChartAsync(string period);
+        Task<CustomerBehaviorMetricsDto> GetCustomerBehaviorMetricsAsync();
     }
 }

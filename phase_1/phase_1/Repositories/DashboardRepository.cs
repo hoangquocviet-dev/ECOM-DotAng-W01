@@ -99,5 +99,39 @@ namespace phase_1.Repositories
                     .ToList();
             }
         }
+
+        public async Task<CustomerBehaviorMetricsDto> GetCustomerBehaviorMetricsAsync()
+        {
+            var customerStats = await _context.Orders
+                .Where(o => o.Status != "Cancelled")
+                .GroupBy(o => o.UserId)
+                .Select(g => new
+                {
+                    UserId = g.Key,
+                    OrderCount = g.Count(),
+                    TotalSpent = g.Sum(o => o.TotalAmount)
+                })
+                .ToListAsync();
+
+            if (!customerStats.Any())
+            {
+                return new CustomerBehaviorMetricsDto();
+            }
+
+            int totalCustomers = customerStats.Count;
+            int returningCustomers = customerStats.Count(c => c.OrderCount > 1);
+            decimal totalRevenue = customerStats.Sum(c => c.TotalSpent);
+
+            double retentionRate = totalCustomers > 0 ? System.Math.Round((double)returningCustomers / totalCustomers * 100, 2) : 0;
+            decimal averageLifetimeValue = totalCustomers > 0 ? System.Math.Round(totalRevenue / totalCustomers, 2) : 0;
+
+            return new CustomerBehaviorMetricsDto
+            {
+                TotalCustomers = totalCustomers,
+                ReturningCustomers = returningCustomers,
+                RetentionRate = retentionRate,
+                AverageLifetimeValue = averageLifetimeValue
+            };
+        }
     }
 }

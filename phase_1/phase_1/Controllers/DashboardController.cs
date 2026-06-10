@@ -37,5 +37,12 @@ namespace phase_1.Controllers
             var data = await _dashboardService.GetRevenueChartAsync(period);
             return Ok(data);
         }
+
+        [HttpGet("customer-behavior")]
+        public async Task<IActionResult> GetCustomerBehaviorMetricsAsync()
+        {
+            var data = await _dashboardService.GetCustomerBehaviorMetricsAsync();
+            return Ok(data);
+        }
     }
 }

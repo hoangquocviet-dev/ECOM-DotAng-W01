@@ -29,5 +29,10 @@ namespace phase_1.Services
         {
             return await _dashboardRepository.GetRevenueChartAsync(period);
         }
+
+        public async Task<CustomerBehaviorMetricsDto> GetCustomerBehaviorMetricsAsync()
+        {
+            return await _dashboardRepository.GetCustomerBehaviorMetricsAsync();
+        }
     }
 }
