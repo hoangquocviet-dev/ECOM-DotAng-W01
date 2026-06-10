@@ -25,6 +25,9 @@ namespace phase_1.Data
         public DbSet<ReturnRequest> ReturnRequests { get; set; }
         public DbSet<Combo> Combos { get; set; }
         public DbSet<ComboItem> ComboItems { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
+        public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+        public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -115,6 +118,24 @@ namespace phase_1.Data
                 .HasOne(ci => ci.Product)
                 .WithMany()
                 .HasForeignKey(ci => ci.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PurchaseOrder>()
+                .HasOne(po => po.Supplier)
+                .WithMany(s => s.PurchaseOrders)
+                .HasForeignKey(po => po.SupplierId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PurchaseOrderDetail>()
+                .HasOne(pod => pod.PurchaseOrder)
+                .WithMany(po => po.PurchaseOrderDetails)
+                .HasForeignKey(pod => pod.PurchaseOrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<PurchaseOrderDetail>()
+                .HasOne(pod => pod.Product)
+                .WithMany()
+                .HasForeignKey(pod => pod.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
