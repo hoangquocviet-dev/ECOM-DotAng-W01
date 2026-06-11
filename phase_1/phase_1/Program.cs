@@ -49,6 +49,7 @@ builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IPurchaseOrderService, phase_1.Services.PurchaseOrderService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddHostedService<phase_1.Services.AbandonedCartHostedService>();
+builder.Services.AddHttpClient<phase_1.Services.Interfaces.IChatService, phase_1.Services.ChatService>();
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
 builder.Services.AddEndpointsApiExplorer();
