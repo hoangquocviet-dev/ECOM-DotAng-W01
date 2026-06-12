@@ -16,5 +16,6 @@ namespace phase_1.Services.Interfaces
         Task<Product> DeleteProductAsync(int id); 
         Task<phase_1.DTOs.PagedResult<Product>> GetProductsPagedAsync(int pageNumber, int pageSize, int? categoryId = null, int? brandId = null, decimal? minPrice = null, decimal? maxPrice = null, string keyword = "");
         Task<IEnumerable<Product>> GetFrequentlyBoughtTogetherAsync(int productId, int limit = 5);
+        Task<phase_1.DTOs.AutoSuggestDto> GetAutoSuggestAsync(string keyword, int limit = 5);
     }
 }

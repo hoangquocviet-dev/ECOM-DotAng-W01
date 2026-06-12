@@ -86,5 +86,12 @@ namespace phase_1.Controllers
             var result = await _productService.GetFrequentlyBoughtTogetherAsync(id, limit);
             return Ok(result);
         }
+
+        [HttpGet("auto-suggest")]
+        public async Task<IActionResult> GetAutoSuggestAsync([FromQuery] string keyword, [FromQuery] int limit = 5)
+        {
+            var result = await _productService.GetAutoSuggestAsync(keyword, limit);
+            return Ok(result);
+        }
     } 
 }

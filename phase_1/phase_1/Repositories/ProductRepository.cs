@@ -131,5 +131,53 @@ namespace phase_1.Repositories
                 .Where(p => relatedProductIds.Contains(p.Id))
                 .ToListAsync();
         }
+
+        public async Task<phase_1.DTOs.AutoSuggestDto> GetAutoSuggestAsync(string keyword, int limit = 5)
+        {
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                return new phase_1.DTOs.AutoSuggestDto();
+            }
+
+            var lowerKeyword = keyword.ToLower();
+
+            var productsQuery = _context.Products
+                .Include(p => p.Category)
+                .Include(p => p.Brand)
+                .Where(p => p.Name.ToLower().Contains(lowerKeyword))
+                .Take(limit);
+
+            var products = await productsQuery.Select(p => new phase_1.DTOs.ProductSuggestDto
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                CategoryName = p.Category != null ? p.Category.Name : string.Empty,
+                BrandName = p.Brand != null ? p.Brand.Name : string.Empty
+            }).ToListAsync();
+
+            var categories = await _context.Categories
+                .Where(c => c.Name.ToLower().Contains(lowerKeyword))
+                .Select(c => c.Name)
+                .Take(3)
+                .ToListAsync();
+
+            var brands = await _context.Brands
+                .Where(b => b.Name.ToLower().Contains(lowerKeyword))
+                .Select(b => b.Name)
+                .Take(3)
+                .ToListAsync();
+
+            var keywords = new List<string>();
+            keywords.AddRange(categories);
+            keywords.AddRange(brands);
+
+            return new phase_1.DTOs.AutoSuggestDto
+            {
+                Products = products,
+                Keywords = keywords.Distinct().Take(limit)
+            };
+        }
     }
 }

@@ -61,5 +61,10 @@ namespace phase_1.Services
         {
             return await _productRepository.GetFrequentlyBoughtTogetherAsync(productId, limit);
         }
+
+        public async Task<phase_1.DTOs.AutoSuggestDto> GetAutoSuggestAsync(string keyword, int limit = 5)
+        {
+            return await _productRepository.GetAutoSuggestAsync(keyword, limit);
+        }
     }
 }
