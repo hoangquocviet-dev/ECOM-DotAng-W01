@@ -8,5 +8,6 @@ namespace phase_1.Services.Interfaces
     {
         Task<IEnumerable<ReviewDto>> GetProductReviewsAsync(int productId);
         Task<ReviewDto?> AddReviewAsync(int userId, AddReviewRequest request);
+        Task<ReviewDto?> ReplyReviewAsync(int reviewId, ReplyReviewRequest request);
     }
 }

@@ -32,20 +32,20 @@ namespace phase_1.Services
                 ProductId = r.ProductId,
                 Rating = r.Rating,
                 Comment = r.Comment,
-                DateCreated = r.DateCreated
+                DateCreated = r.DateCreated,
+                MediaUrls = r.ReviewMedias.Select(m => m.MediaUrl).ToList(),
+                AdminReply = r.AdminReply,
+                ReplyDate = r.ReplyDate
             });
         }
 
         public async Task<ReviewDto?> AddReviewAsync(int userId, AddReviewRequest request)
         {
-            // 1. Check if user already reviewed this product
             var existingReview = await _reviewRepository.GetReviewByUserAndProductAsync(userId, request.ProductId);
             if (existingReview != null)
             {
-                return null; // Already reviewed
+                return null; 
             }
-
-            // 2. Check if user has actually bought the product
             var userOrders = await _orderRepository.GetOrdersByUserIdAsync(userId);
             var hasBought = userOrders.Any(o => o.Status != "Cancelled" && o.OrderDetails.Any(od => od.ProductId == request.ProductId));
             
@@ -60,12 +60,11 @@ namespace phase_1.Services
                 ProductId = request.ProductId,
                 Rating = request.Rating,
                 Comment = request.Comment,
-                DateCreated = DateTime.UtcNow
+                DateCreated = DateTime.UtcNow,
+                ReviewMedias = request.MediaUrls != null ? request.MediaUrls.Select(url => new ReviewMedia { MediaUrl = url }).ToList() : new List<ReviewMedia>()
             };
 
             await _reviewRepository.AddReviewAsync(review);
-
-            // Fetch user info for DTO
             var newReviewList = await _reviewRepository.GetReviewsByProductIdAsync(request.ProductId);
             var savedReview = newReviewList.FirstOrDefault(r => r.UserId == userId);
 
@@ -77,7 +76,38 @@ namespace phase_1.Services
                 ProductId = request.ProductId,
                 Rating = request.Rating,
                 Comment = request.Comment,
-                DateCreated = review.DateCreated
+                DateCreated = review.DateCreated,
+                MediaUrls = review.ReviewMedias.Select(m => m.MediaUrl).ToList(),
+                AdminReply = savedReview?.AdminReply,
+                ReplyDate = savedReview?.ReplyDate
+            };
+        }
+
+        public async Task<ReviewDto?> ReplyReviewAsync(int reviewId, ReplyReviewRequest request)
+        {
+            var review = await _reviewRepository.GetReviewByIdAsync(reviewId);
+            if (review == null)
+            {
+                return null;
+            }
+
+            review.AdminReply = request.Reply;
+            review.ReplyDate = DateTime.UtcNow;
+
+            await _reviewRepository.UpdateReviewAsync(review);
+
+            return new ReviewDto
+            {
+                Id = review.Id,
+                UserId = review.UserId,
+                UserName = review.User?.Name ?? "Anonymous",
+                ProductId = review.ProductId,
+                Rating = review.Rating,
+                Comment = review.Comment,
+                DateCreated = review.DateCreated,
+                MediaUrls = review.ReviewMedias.Select(m => m.MediaUrl).ToList(),
+                AdminReply = review.AdminReply,
+                ReplyDate = review.ReplyDate
             };
         }
     }

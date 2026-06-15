@@ -19,5 +19,10 @@ namespace phase_1.Models
         public int Rating { get; set; }
         public string Comment { get; set; } = string.Empty;
         public DateTime DateCreated { get; set; } = DateTime.UtcNow;
+        
+        public string? AdminReply { get; set; }
+        public DateTime? ReplyDate { get; set; }
+        
+        public ICollection<ReviewMedia> ReviewMedias { get; set; } = new List<ReviewMedia>();
     }
 }

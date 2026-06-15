@@ -13,5 +13,7 @@ namespace phase_1.DTOs
 
         [MaxLength(1000)]
         public string Comment { get; set; } = string.Empty;
+
+        public System.Collections.Generic.List<string> MediaUrls { get; set; } = new System.Collections.Generic.List<string>();
     }
 }

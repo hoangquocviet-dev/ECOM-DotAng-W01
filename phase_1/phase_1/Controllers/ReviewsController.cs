@@ -62,5 +62,23 @@ namespace phase_1.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{reviewId}/reply")]
+        public async Task<IActionResult> ReplyReviewAsync(int reviewId, [FromBody] ReplyReviewRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var review = await _reviewService.ReplyReviewAsync(reviewId, request);
+            if (review == null)
+            {
+                return NotFound("Review not found.");
+            }
+
+            return Ok(review);
+        }
     }
 }

@@ -8,6 +8,8 @@ namespace phase_1.Repositories
     {
         Task<IEnumerable<Review>> GetReviewsByProductIdAsync(int productId);
         Task<Review?> GetReviewByUserAndProductAsync(int userId, int productId);
+        Task<Review?> GetReviewByIdAsync(int id);
         Task AddReviewAsync(Review review);
+        Task UpdateReviewAsync(Review review);
     }
 }

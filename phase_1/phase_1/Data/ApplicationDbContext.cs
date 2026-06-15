@@ -18,6 +18,7 @@ namespace phase_1.Data
         public DbSet<CompanySetting> CompanySettings { get; set; }
         public DbSet<WishlistItem> WishlistItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<ReviewMedia> ReviewMedias { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
@@ -95,6 +96,12 @@ namespace phase_1.Data
                 .HasOne(r => r.Product)
                 .WithMany()
                 .HasForeignKey(r => r.ProductId);
+
+            modelBuilder.Entity<ReviewMedia>()
+                .HasOne(rm => rm.Review)
+                .WithMany(r => r.ReviewMedias)
+                .HasForeignKey(rm => rm.ReviewId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ReturnRequest>()
                 .HasOne(r => r.User)
