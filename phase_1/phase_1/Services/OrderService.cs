@@ -57,6 +57,11 @@ namespace phase_1.Services
                     {
                         product.StockQuantity -= item.Quantity;
                         await _productRepository.UpdateAsync(product);
+
+                        if (product.StockQuantity < product.LowStockThreshold)
+                        {
+                            await _hubContext.Clients.All.SendAsync("ReceiveLowStockAlert", product.Id, product.Name, product.StockQuantity);
+                        }
                     }
 
                     var orderDetail = new OrderDetail
