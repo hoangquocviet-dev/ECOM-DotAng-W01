@@ -29,6 +29,8 @@ namespace phase_1.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public DbSet<FlashSale> FlashSales { get; set; }
+        public DbSet<FlashSaleItem> FlashSaleItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -143,6 +145,18 @@ namespace phase_1.Data
                 .HasOne(pod => pod.Product)
                 .WithMany()
                 .HasForeignKey(pod => pod.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FlashSaleItem>()
+                .HasOne(fsi => fsi.FlashSale)
+                .WithMany(fs => fs.FlashSaleItems)
+                .HasForeignKey(fsi => fsi.FlashSaleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FlashSaleItem>()
+                .HasOne(fsi => fsi.Product)
+                .WithMany()
+                .HasForeignKey(fsi => fsi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
