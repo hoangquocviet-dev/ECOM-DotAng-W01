@@ -31,6 +31,7 @@ namespace phase_1.Data
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public DbSet<FlashSale> FlashSales { get; set; }
         public DbSet<FlashSaleItem> FlashSaleItems { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -158,6 +159,12 @@ namespace phase_1.Data
                 .WithMany()
                 .HasForeignKey(fsi => fsi.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductVariant>()
+                .HasOne(pv => pv.Product)
+                .WithMany(p => p.ProductVariants)
+                .HasForeignKey(pv => pv.ProductId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

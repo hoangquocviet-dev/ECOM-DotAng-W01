@@ -22,7 +22,10 @@ namespace phase_1.Repositories
 
         public async Task<Product?> GetByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products
+                .Include(p => p.ProductVariants)
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task AddAsync(Product product)
@@ -46,6 +49,8 @@ namespace phase_1.Repositories
         {
             return await _context.Products
                 .Include(p => p.Category)
+                .Include(p => p.ProductImages)
+                .Include(p => p.ProductVariants)
                 .Where(p => p.Name.Contains(keyword))
                 .ToListAsync();
         }
@@ -77,6 +82,7 @@ namespace phase_1.Repositories
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductImages)
+                .Include(p => p.ProductVariants)
                 .AsQueryable();
 
             if (categoryId.HasValue)
@@ -128,6 +134,7 @@ namespace phase_1.Repositories
                 .Include(p => p.Category)
                 .Include(p => p.Brand)
                 .Include(p => p.ProductImages)
+                .Include(p => p.ProductVariants)
                 .Where(p => relatedProductIds.Contains(p.Id))
                 .ToListAsync();
         }

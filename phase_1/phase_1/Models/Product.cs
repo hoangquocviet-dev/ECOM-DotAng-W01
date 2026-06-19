@@ -19,5 +19,6 @@ namespace phase_1.Models
         public Brand? Brand { get; set; }
 
         public ICollection<ProductImage> ProductImages { get; set; } = new List<ProductImage>();
+        public ICollection<ProductVariant> ProductVariants { get; set; } = new List<ProductVariant>();
     }
 }

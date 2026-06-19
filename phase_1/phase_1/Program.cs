@@ -49,6 +49,8 @@ builder.Services.AddScoped<IPurchaseOrderRepository, PurchaseOrderRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IPurchaseOrderService, phase_1.Services.PurchaseOrderService>();
 builder.Services.AddScoped<IFlashSaleRepository, FlashSaleRepository>();
 builder.Services.AddScoped<phase_1.Services.Interfaces.IFlashSaleService, phase_1.Services.FlashSaleService>();
+builder.Services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
+builder.Services.AddScoped<phase_1.Services.Interfaces.IProductVariantService, phase_1.Services.ProductVariantService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddHostedService<phase_1.Services.AbandonedCartHostedService>();
 builder.Services.AddHttpClient<phase_1.Services.Interfaces.IChatService, phase_1.Services.ChatService>();
