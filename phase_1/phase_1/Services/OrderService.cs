@@ -139,6 +139,18 @@ namespace phase_1.Services
                 }
             }
 
+            if (newStatus == "Cancelled" && order.Status != "Cancelled")
+            {
+                foreach (var detail in order.OrderDetails)
+                {
+                    if (detail.Product != null)
+                    {
+                        detail.Product.StockQuantity += detail.Quantity;
+                        await _productRepository.UpdateAsync(detail.Product);
+                    }
+                }
+            }
+
             order.Status = newStatus;
             await _orderRepository.UpdateOrderAsync(order);
             
@@ -159,6 +171,18 @@ namespace phase_1.Services
             if (paymentStatus == "Paid")
             {
                 order.Status = "Processing";
+            }
+            else if (paymentStatus == "Failed" && order.Status != "Cancelled")
+            {
+                order.Status = "Cancelled";
+                foreach (var detail in order.OrderDetails)
+                {
+                    if (detail.Product != null)
+                    {
+                        detail.Product.StockQuantity += detail.Quantity;
+                        await _productRepository.UpdateAsync(detail.Product);
+                    }
+                }
             }
             
             await _orderRepository.UpdateOrderAsync(order);
