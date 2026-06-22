@@ -33,6 +33,7 @@ namespace phase_1.Data
         public DbSet<FlashSaleItem> FlashSaleItems { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<Banner> Banners { get; set; }
+        public DbSet<Page> Pages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
