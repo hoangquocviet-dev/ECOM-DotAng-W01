@@ -25,14 +25,27 @@ namespace phase_1.Services
             return await _categoryRepository.GetByIdAsync(id);
         }
 
+        public async Task<Category?> GetCategoryBySlugAsync(string slug)
+        {
+            return await _categoryRepository.GetBySlugAsync(slug);
+        }
+
         public async Task<Category> CreateCategoryAsync(Category category)
         {
+            if (string.IsNullOrEmpty(category.Slug))
+            {
+                category.Slug = phase_1.Helpers.StringHelper.GenerateSlug(category.Name);
+            }
             await _categoryRepository.AddAsync(category);
             return category;
         }
 
         public async Task<Category> UpdateCategoryAsync(Category category)
         {
+            if (string.IsNullOrEmpty(category.Slug))
+            {
+                category.Slug = phase_1.Helpers.StringHelper.GenerateSlug(category.Name);
+            }
             await _categoryRepository.UpdateAsync(category);
             return category;
         }

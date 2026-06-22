@@ -8,6 +8,7 @@ namespace phase_1.Repositories
     {
         Task<IEnumerable<Category>> GetAllAsync();
         Task<Category?> GetByIdAsync(int id);
+        Task<Category?> GetBySlugAsync(string slug);
         Task AddAsync(Category category);
         Task UpdateAsync(Category category);
         Task DeleteAsync(Category category);

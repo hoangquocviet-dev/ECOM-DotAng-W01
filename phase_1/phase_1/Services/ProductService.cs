@@ -15,14 +15,27 @@ namespace phase_1.Services
             _productRepository = productRepository;
         }
 
+        public async Task<Product?> GetProductBySlugAsync(string slug)
+        {
+            return await _productRepository.GetBySlugAsync(slug);
+        }
+
         public async Task<Product> CreateProductAsync(Product newProduct)
         {
+            if (string.IsNullOrEmpty(newProduct.Slug))
+            {
+                newProduct.Slug = phase_1.Helpers.StringHelper.GenerateSlug(newProduct.Name);
+            }
             await _productRepository.AddAsync(newProduct);
             return newProduct;
         }
 
         public async Task<Product> UpdateProductAsync(Product updatedProduct)
         {
+            if (string.IsNullOrEmpty(updatedProduct.Slug))
+            {
+                updatedProduct.Slug = phase_1.Helpers.StringHelper.GenerateSlug(updatedProduct.Name);
+            }
             await _productRepository.UpdateAsync(updatedProduct);
             return updatedProduct;
         }

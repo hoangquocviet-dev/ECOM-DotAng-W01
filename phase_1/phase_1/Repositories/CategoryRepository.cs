@@ -25,6 +25,11 @@ namespace phase_1.Repositories
             return await _context.Categories.FindAsync(id);
         }
 
+        public async Task<Category?> GetBySlugAsync(string slug)
+        {
+            return await _context.Categories.FirstOrDefaultAsync(c => c.Slug == slug);
+        }
+
         public async Task AddAsync(Category category)
         {
             await _context.Categories.AddAsync(category);

@@ -8,6 +8,7 @@ namespace phase_1.Services.Interfaces
     {
         Task<IEnumerable<Category>> GetAllCategoriesAsync();
         Task<Category?> GetCategoryByIdAsync(int id);
+        Task<Category?> GetCategoryBySlugAsync(string slug);
         Task<Category> CreateCategoryAsync(Category category);
         Task<Category> UpdateCategoryAsync(Category category);
         Task<Category?> DeleteCategoryAsync(int id);

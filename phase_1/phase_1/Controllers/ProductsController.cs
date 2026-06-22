@@ -30,6 +30,14 @@ namespace phase_1.Controllers
             return Ok(result);
         }
 
+        [HttpGet("slug/{slug}")]
+        public async Task<IActionResult> GetProductBySlugAsync([FromRoute] string slug)
+        {
+            var result = await _productService.GetProductBySlugAsync(slug);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
         [HttpGet("top3/{category}")]
         public async Task<IActionResult> GetTop3ByCategoryAsync([FromRoute] string category)
         {

@@ -28,6 +28,14 @@ namespace phase_1.Repositories
                 .FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task<Product?> GetBySlugAsync(string slug)
+        {
+            return await _context.Products
+                .Include(p => p.ProductVariants)
+                .Include(p => p.ProductImages)
+                .FirstOrDefaultAsync(p => p.Slug == slug);
+        }
+
         public async Task AddAsync(Product product)
         {
             await _context.Products.AddAsync(product);

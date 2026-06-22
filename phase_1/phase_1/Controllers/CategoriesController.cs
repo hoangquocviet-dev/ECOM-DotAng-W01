@@ -32,6 +32,14 @@ namespace phase_1.Controllers
             return Ok(result);
         }
 
+        [HttpGet("slug/{slug}")]
+        public async Task<IActionResult> GetCategoryBySlugAsync([FromRoute] string slug)
+        {
+            var result = await _categoryService.GetCategoryBySlugAsync(slug);
+            if (result == null) return NotFound();
+            return Ok(result);
+        }
+
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateCategoryAsync([FromBody] Category category)
