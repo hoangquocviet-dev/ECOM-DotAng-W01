@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 using phase_1.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace phase_1.Services
 {
@@ -18,8 +21,9 @@ namespace phase_1.Services
         private readonly IVoucherRepository _voucherRepository;
         private readonly IUserRepository _userRepository;
         private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly ICompanySettingRepository _companySettingRepository;
 
-        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext)
+        public OrderService(IOrderRepository orderRepository, ICartRepository cartRepository, IProductRepository productRepository, IVoucherRepository voucherRepository, IUserRepository userRepository, IHubContext<NotificationHub> hubContext, ICompanySettingRepository companySettingRepository)
         {
             _orderRepository = orderRepository;
             _cartRepository = cartRepository;
@@ -27,6 +31,7 @@ namespace phase_1.Services
             _voucherRepository = voucherRepository;
             _userRepository = userRepository;
             _hubContext = hubContext;
+            _companySettingRepository = companySettingRepository;
         }
 
         public async Task<Order?> CheckoutAsync(int userId, string shippingAddress, string paymentMethod, string? voucherCode = null)
@@ -187,6 +192,129 @@ namespace phase_1.Services
             
             await _orderRepository.UpdateOrderAsync(order);
             return order;
+        }
+
+        public async Task<byte[]> GenerateInvoicePdfAsync(int orderId)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            if (order == null) throw new ArgumentException("Order not found");
+
+            var companySettings = await _companySettingRepository.GetSettingsAsync();
+            
+            var document = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    page.Size(PageSizes.A4);
+                    page.Margin(2, Unit.Centimetre);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(12));
+
+                    page.Header().Element(header => ComposeHeader(header, companySettings, order));
+                    page.Content().Element(content => ComposeContent(content, order));
+                    page.Footer().AlignCenter().Text(x =>
+                    {
+                        x.CurrentPageNumber();
+                        x.Span(" / ");
+                        x.TotalPages();
+                    });
+                });
+            });
+
+            return document.GeneratePdf();
+        }
+
+        private void ComposeHeader(IContainer container, CompanySetting company, Order order)
+        {
+            container.Row(row =>
+            {
+                row.RelativeItem().Column(column =>
+                {
+                    column.Item().Text(company?.CompanyName ?? "E-Commerce Store").FontSize(20).SemiBold().FontColor(Colors.Blue.Darken2);
+                    column.Item().Text(company?.Address ?? "Hanoi, Vietnam");
+                    column.Item().Text(company?.Hotline ?? "0886528046");
+                    column.Item().Text(company?.Email ?? "hoangquocviet.dev@gmail.com");
+                });
+            });
+        }
+
+        private void ComposeContent(IContainer container, Order order)
+        {
+            container.PaddingVertical(1, Unit.Centimetre).Column(column =>
+            {
+                column.Spacing(5);
+                column.Item().Text("HÓA ĐƠN MUA HÀNG").FontSize(24).SemiBold().FontColor(Colors.Blue.Darken2).AlignCenter();
+                
+                column.Item().Row(row =>
+                {
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Text($"Mã hóa đơn: #{order.Id}").SemiBold();
+                        col.Item().Text($"Ngày mua: {order.OrderDate:dd/MM/yyyy HH:mm}");
+                        col.Item().Text($"Khách hàng: {order.User?.Name ?? "Khách hàng"}");
+                        col.Item().Text($"Số điện thoại: {order.User?.PhoneNumber ?? "Không có"}");
+                        col.Item().Text($"Địa chỉ giao hàng: {order.ShippingAddress}");
+                    });
+                });
+
+                column.Item().PaddingTop(25).Element(tableContainer => ComposeTable(tableContainer, order));
+
+                var totalPrice = order.TotalAmount + order.DiscountAmount;
+                
+                column.Item().PaddingTop(25).AlignRight().Column(col => 
+                {
+                    col.Item().Text($"Tổng tiền: {totalPrice:C}").FontSize(14);
+                    if (order.DiscountAmount > 0)
+                    {
+                        col.Item().Text($"Giảm giá: -{order.DiscountAmount:C}").FontSize(14).FontColor(Colors.Red.Medium);
+                    }
+                    col.Item().Text($"Thành tiền: {order.TotalAmount:C}").FontSize(16).SemiBold();
+                    col.Item().Text($"Phương thức thanh toán: {order.PaymentMethod}");
+                    col.Item().Text($"Trạng thái thanh toán: {order.PaymentStatus}");
+                });
+            });
+        }
+
+        private void ComposeTable(IContainer container, Order order)
+        {
+            container.Table(table =>
+            {
+                table.ColumnsDefinition(columns =>
+                {
+                    columns.ConstantColumn(25);
+                    columns.RelativeColumn(3);
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
+                    columns.RelativeColumn();
+                });
+
+                table.Header(header =>
+                {
+                    header.Cell().Text("#").SemiBold();
+                    header.Cell().Text("Sản phẩm").SemiBold();
+                    header.Cell().AlignRight().Text("Đơn giá").SemiBold();
+                    header.Cell().AlignRight().Text("Số lượng").SemiBold();
+                    header.Cell().AlignRight().Text("Thành tiền").SemiBold();
+
+                    header.Cell().ColumnSpan(5).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
+                });
+
+                var index = 1;
+                foreach (var item in order.OrderDetails)
+                {
+                    table.Cell().Element(CellStyle).Text(index.ToString());
+                    table.Cell().Element(CellStyle).Text(item.Product?.Name ?? "Sản phẩm");
+                    table.Cell().Element(CellStyle).AlignRight().Text($"{item.UnitPrice:C}");
+                    table.Cell().Element(CellStyle).AlignRight().Text(item.Quantity.ToString());
+                    table.Cell().Element(CellStyle).AlignRight().Text($"{item.UnitPrice * item.Quantity:C}");
+
+                    static IContainer CellStyle(IContainer container)
+                    {
+                        return container.BorderBottom(1).BorderColor(Colors.Grey.Lighten2).PaddingVertical(5);
+                    }
+                    index++;
+                }
+            });
         }
     }
 }

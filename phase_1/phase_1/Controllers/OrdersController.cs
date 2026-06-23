@@ -91,6 +91,20 @@ namespace phase_1.Controllers
             return Ok(order);
         }
 
+        [HttpGet("{id}/invoice")]
+        public async Task<IActionResult> ExportInvoiceAsync(int id)
+        {
+            try
+            {
+                var pdfBytes = await _orderService.GenerateInvoicePdfAsync(id);
+                return File(pdfBytes, "application/pdf", $"Invoice_{id}.pdf");
+            }
+            catch (System.ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         [AllowAnonymous]
         [HttpGet("momo-return")]
         public async Task<IActionResult> MomoReturn([FromQuery] string partnerCode, [FromQuery] string orderId, [FromQuery] string requestId, [FromQuery] string amount, [FromQuery] string orderInfo, [FromQuery] string orderType, [FromQuery] string transId, [FromQuery] string resultCode, [FromQuery] string message, [FromQuery] string payType, [FromQuery] string responseTime, [FromQuery] string extraData, [FromQuery] string signature)

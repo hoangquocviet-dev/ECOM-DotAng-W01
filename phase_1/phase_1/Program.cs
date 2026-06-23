@@ -6,6 +6,9 @@ using phase_1.Data;
 using phase_1.Repositories;
 using phase_1.Services;
 using System.Text;
+using QuestPDF.Infrastructure;
+
+QuestPDF.Settings.License = LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

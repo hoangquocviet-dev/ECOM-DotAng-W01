@@ -45,6 +45,8 @@ namespace phase_1.Repositories
         public async Task<Order?> GetOrderByIdAsync(int orderId)
         {
             return await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.Voucher)
                 .Include(o => o.OrderDetails)
                 .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
