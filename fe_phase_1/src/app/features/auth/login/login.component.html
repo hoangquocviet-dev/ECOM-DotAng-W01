@@ -1,0 +1,36 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Đăng Nhập</h2>
+    
+    <div class="error-alert" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="emailOrUsername">Tài khoản (Email / Username)</label>
+        <input type="text" id="emailOrUsername" formControlName="emailOrUsername" class="form-control" placeholder="Nhập email hoặc tên người dùng">
+        <div class="error-text" *ngIf="loginForm.get('emailOrUsername')?.touched && loginForm.get('emailOrUsername')?.invalid">
+          Vui lòng nhập tài khoản.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <input type="password" id="password" formControlName="password" class="form-control" placeholder="Nhập mật khẩu">
+        <div class="error-text" *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+          Mật khẩu tối thiểu 6 ký tự.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid || isLoading">
+        {{ isLoading ? 'Đang xử lý...' : 'Đăng Nhập' }}
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <a routerLink="/auth/register">Chưa có tài khoản? Đăng ký ngay</a>
+      <a routerLink="/auth/forgot-password">Quên mật khẩu?</a>
+    </div>
+  </div>
+</div>

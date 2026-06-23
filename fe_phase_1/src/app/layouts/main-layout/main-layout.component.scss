@@ -1,0 +1,37 @@
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  
+  .logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: #212529;
+  }
+  
+  .nav-links a, .auth-links a {
+    margin-left: 1rem;
+    text-decoration: none;
+    color: #495057;
+    
+    &:hover {
+      color: #007bff;
+    }
+  }
+}
+
+.main-content {
+  min-height: 80vh;
+  padding: 2rem;
+}
+
+.main-footer {
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
