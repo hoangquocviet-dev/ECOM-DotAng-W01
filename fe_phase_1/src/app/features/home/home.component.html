@@ -1,4 +1,95 @@
-<div class="home-container">
-  <h1>Chào mừng đến với E-Commerce</h1>
-  <p>Trang chủ đang được xây dựng...</p>
+<div class="home-page">
+  <!-- Banners Slider -->
+  <section class="banner-section" *ngIf="banners.length > 0">
+    <div class="slider-container">
+      <div class="slider-wrapper" [style.transform]="'translateX(-' + activeBannerIndex * 100 + '%)'">
+        <div class="slide" *ngFor="let banner of banners; trackBy: trackById">
+          <a [routerLink]="banner.linkUrl">
+            <img [src]="banner.imageUrl" [alt]="banner.title">
+          </a>
+        </div>
+      </div>
+      
+      <button class="slider-btn prev" (click)="prevBanner()">&#10094;</button>
+      <button class="slider-btn next" (click)="nextBanner()">&#10095;</button>
+
+      <div class="slider-dots">
+        <span class="dot" *ngFor="let banner of banners; let i = index; trackBy: trackById" 
+              [class.active]="i === activeBannerIndex"
+              (click)="setBanner(i)">
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Flash Sale Section -->
+  <section class="flash-sale-section" *ngIf="flashSale">
+    <div class="section-header flash-sale-header">
+      <div class="title-group">
+        <h2>⚡ Flash Sale</h2>
+        <div class="countdown">
+          <span>Kết thúc trong:</span>
+          <div class="timer">
+            <span class="time-box">{{ countdownHours }}</span>
+            <span class="colon">:</span>
+            <span class="time-box">{{ countdownMinutes }}</span>
+            <span class="colon">:</span>
+            <span class="time-box">{{ countdownSeconds }}</span>
+          </div>
+        </div>
+      </div>
+      <a routerLink="/flash-sale" class="view-all">Xem tất cả ></a>
+    </div>
+
+    <div class="product-grid flash-sale-grid">
+      <div class="product-card" *ngFor="let item of flashSale.items; trackBy: trackById">
+        <div class="discount-badge">-{{ item.discountPercentage }}%</div>
+        <div class="product-img">
+          <img [src]="item.product.imageUrl" [alt]="item.product.name">
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ item.product.name }}</h3>
+          <div class="product-price">
+            <span class="current-price">{{ item.discountPrice | number }}đ</span>
+            <span class="original-price">{{ item.product.price | number }}đ</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress" [style.width]="(item.soldQuantity / item.totalQuantity * 100) + '%'"></div>
+            <span class="progress-text">Đã bán {{ item.soldQuantity }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Products Section -->
+  <section class="featured-products-section">
+    <div class="section-header">
+      <h2>Sản Phẩm Nổi Bật</h2>
+      <a routerLink="/shop" class="view-all">Xem tất cả ></a>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let product of featuredProducts; trackBy: trackById">
+        <div class="new-badge" *ngIf="product.isNew">Mới</div>
+        <div class="product-img">
+          <img [src]="product.imageUrl" [alt]="product.name">
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <div class="rating" *ngIf="product.rating">
+            <span class="stars">★★★★★</span>
+            <span class="review-count">({{ product.reviewCount }})</span>
+          </div>
+          <div class="product-price">
+            <span class="current-price">{{ (product.discountPrice || product.price) | number }}đ</span>
+            <span class="original-price" *ngIf="product.discountPrice">{{ product.price | number }}đ</span>
+          </div>
+        </div>
+        <div class="product-actions">
+          <button class="btn btn-outline">Thêm Giỏ Hàng</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </div>

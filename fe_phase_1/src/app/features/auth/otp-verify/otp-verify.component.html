@@ -1,0 +1,35 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Xác Thực OTP</h2>
+    
+    <div class="error-alert" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" formControlName="email" class="form-control" placeholder="Nhập email của bạn">
+        <div class="error-text" *ngIf="otpForm.get('email')?.touched && otpForm.get('email')?.invalid">
+          Vui lòng nhập địa chỉ email hợp lệ.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="otpCode">Mã OTP</label>
+        <input type="text" id="otpCode" formControlName="otpCode" class="form-control" placeholder="Nhập mã gồm 6 chữ số" maxlength="6">
+        <div class="error-text" *ngIf="otpForm.get('otpCode')?.touched && otpForm.get('otpCode')?.invalid">
+          Vui lòng nhập đúng 6 ký tự mã OTP.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="otpForm.invalid || isLoading">
+        {{ isLoading ? 'Đang xử lý...' : 'Xác nhận OTP' }}
+      </button>
+    </form>
+
+    <div class="auth-links">
+      <a routerLink="/auth/login">Quay lại Đăng nhập</a>
+    </div>
+  </div>
+</div>

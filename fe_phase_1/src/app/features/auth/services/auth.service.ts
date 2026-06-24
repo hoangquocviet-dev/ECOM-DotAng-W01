@@ -31,4 +31,16 @@ export class AuthService {
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  verifyOtp(email: string, otpCode: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/verify-otp`, { email, otpCode });
+  }
+
+  forgotPassword(email: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(email: string, token: string, newPassword: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reset-password`, { email, token, newPassword });
+  }
 }
