@@ -1,1 +1,71 @@
-<p>product-list works!</p>
+<div class="shop-container">
+  <!-- Sidebar Bộ lọc -->
+  <aside class="shop-sidebar">
+    <div class="filter-group">
+      <h3>Danh mục</h3>
+      <ul class="category-list">
+        <li *ngFor="let cat of categories" 
+            [class.active]="activeCategory === cat"
+            (click)="filterByCategory(cat)">
+          {{ cat }}
+        </li>
+      </ul>
+    </div>
+    
+    <div class="filter-group mt-4">
+      <h3>Khoảng giá</h3>
+      <div class="price-filter">
+        <input type="number" placeholder="Từ" class="price-input">
+        <span>-</span>
+        <input type="number" placeholder="Đến" class="price-input">
+      </div>
+      <button class="btn-apply mt-3">Áp dụng</button>
+    </div>
+  </aside>
+
+  <!-- Danh sách sản phẩm -->
+  <main class="shop-content">
+    <div class="shop-header">
+      <h2>Sản phẩm ({{products.length}})</h2>
+      <div class="sort-box">
+        <select>
+          <option>Mới nhất</option>
+          <option>Giá tăng dần</option>
+          <option>Giá giảm dần</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="product-grid">
+      <div class="product-card" *ngFor="let item of products" [routerLink]="['/product', item.slug]">
+        <div class="badge-new" *ngIf="item.isNew">Mới</div>
+        <div class="badge-sale" *ngIf="item.discountPrice">
+          -{{ ((item.price - item.discountPrice) / item.price * 100) | number:'1.0-0' }}%
+        </div>
+        <div class="img-wrapper">
+          <img [src]="item.imageUrl" [alt]="item.name">
+        </div>
+        <div class="card-info">
+          <span class="category">{{item.category}}</span>
+          <h3 class="product-name">{{ item.name }}</h3>
+          <div class="rating">
+            <span class="stars">★★★★★</span>
+            <span class="count">({{item.reviewCount}})</span>
+          </div>
+          <div class="price-box">
+            <span class="current-price">{{ (item.discountPrice || item.price) | number:'1.0-0' }}đ</span>
+            <span class="old-price" *ngIf="item.discountPrice">{{ item.price | number:'1.0-0' }}đ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phân trang -->
+    <div class="pagination">
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <button class="page-btn">Tiếp</button>
+    </div>
+  </main>
+</div>

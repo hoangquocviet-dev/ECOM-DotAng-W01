@@ -11,6 +11,14 @@ export const routes: Routes = [
     children: [
       // Các route khác dành cho User (Home, Products, Cart...) sẽ để ở đây
       {
+        path: 'products',
+        loadComponent: () => import('./features/products/components/product-list/product-list').then(m => m.ProductList)
+      },
+      {
+        path: 'product/:slug',
+        loadComponent: () => import('./features/products/components/product-detail/product-detail.component').then(m => m.ProductDetailComponent)
+      },
+      {
         path: '',
         loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
       }

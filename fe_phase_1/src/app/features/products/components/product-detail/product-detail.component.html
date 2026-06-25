@@ -1,0 +1,101 @@
+<div class="product-detail-container" *ngIf="product">
+  <!-- Breadcrumb -->
+  <nav class="breadcrumb">
+    <a routerLink="/">Trang chủ</a> / 
+    <a routerLink="/products">Sản phẩm</a> / 
+    <span class="current">{{ product.name }}</span>
+  </nav>
+
+  <div class="product-main">
+    <!-- Gallery -->
+    <div class="product-gallery">
+      <div class="main-image">
+        <img [src]="activeImage" [alt]="product.name">
+      </div>
+      <div class="thumbnail-list">
+        <div class="thumb" 
+             *ngFor="let img of product.images" 
+             [class.active]="img === activeImage"
+             (click)="changeImage(img)">
+          <img [src]="img" alt="Thumbnail">
+        </div>
+      </div>
+    </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <h1 class="title">{{ product.name }}</h1>
+      <div class="rating-box">
+        <span class="stars">★★★★★</span>
+        <span class="review-count">{{ product.rating }} / 5 ({{ product.reviewCount }} Đánh giá)</span>
+      </div>
+
+      <div class="price-section">
+        <span class="current-price">{{ (product.discountPrice || product.price) | number:'1.0-0' }}đ</span>
+        <span class="old-price" *ngIf="product.discountPrice">{{ product.price | number:'1.0-0' }}đ</span>
+      </div>
+
+      <!-- Variants -->
+      <div class="variant-section" *ngIf="product.variants.length > 0">
+        <div class="variant-group">
+          <label>Màu sắc: <strong>{{ selectedColor }}</strong></label>
+          <div class="options">
+            <button class="variant-btn" 
+                    [class.active]="selectedColor === 'Đen'" 
+                    (click)="selectColor('Đen')">Đen</button>
+            <button class="variant-btn" 
+                    [class.active]="selectedColor === 'Trắng'" 
+                    (click)="selectColor('Trắng')">Trắng</button>
+          </div>
+        </div>
+        
+        <div class="variant-group">
+          <label>Kích thước: <strong>{{ selectedSize }}</strong></label>
+          <div class="options">
+            <button class="variant-btn" 
+                    [class.active]="selectedSize === 'Tiêu chuẩn'" 
+                    (click)="selectSize('Tiêu chuẩn')">Tiêu chuẩn</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="action-section">
+        <div class="quantity-box">
+          <button (click)="decreaseQty()">-</button>
+          <input type="number" [value]="quantity" readonly>
+          <button (click)="increaseQty()">+</button>
+        </div>
+        
+        <button class="btn-add-cart">Thêm vào giỏ</button>
+        <button class="btn-buy-now">Mua ngay</button>
+        <button class="btn-wishlist">♡</button>
+      </div>
+
+      <div class="policy-list mt-4">
+        <ul>
+          <li>✓ Giao hàng toàn quốc</li>
+          <li>✓ Đổi trả trong 7 ngày</li>
+          <li>✓ Cam kết chính hãng</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="product-tabs">
+    <div class="tab-headers">
+      <button class="tab-btn active">Mô tả sản phẩm</button>
+      <button class="tab-btn">Đánh giá ({{ product.reviewCount }})</button>
+    </div>
+    
+    <div class="tab-content">
+      <div class="description" [innerHTML]="product.description"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading state -->
+<div class="loading" *ngIf="!product">
+  Đang tải thông tin sản phẩm...
+</div>

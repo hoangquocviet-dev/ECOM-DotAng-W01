@@ -1,0 +1,248 @@
+.shop-container {
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  gap: 30px;
+}
+
+.shop-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+
+  .filter-group {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #333;
+    }
+  }
+
+  .category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      padding: 10px 15px;
+      margin-bottom: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #555;
+      transition: all 0.2s;
+
+      &:hover {
+        background: #f5f7fa;
+        color: #2563eb;
+      }
+
+      &.active {
+        background: #ebf5ff;
+        color: #2563eb;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .price-filter {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .price-input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      
+      &:focus {
+        border-color: #2563eb;
+      }
+    }
+  }
+
+  .btn-apply {
+    width: 100%;
+    padding: 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: 0.2s;
+    margin-top: 15px;
+
+    &:hover {
+      background: #1d4ed8;
+    }
+  }
+}
+
+.shop-content {
+  flex-grow: 1;
+
+  .shop-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+
+    h2 {
+      font-size: 1.5rem;
+      color: #222;
+      margin: 0;
+    }
+
+    .sort-box select {
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      outline: none;
+      background: #fff;
+    }
+  }
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid #eee;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+
+    .img-wrapper img {
+      transform: scale(1.05);
+    }
+  }
+
+  .badge-new, .badge-sale {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: white;
+    z-index: 2;
+  }
+  
+  .badge-new { background: #10b981; }
+  .badge-sale { 
+    background: #ef4444; 
+    left: auto;
+    right: 10px;
+  }
+
+  .img-wrapper {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: #f9f9f9;
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+  }
+
+  .card-info {
+    padding: 15px;
+
+    .category {
+      display: block;
+      font-size: 0.75rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 5px;
+    }
+
+    .product-name {
+      font-size: 1rem;
+      color: #333;
+      margin: 0 0 10px 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 500;
+    }
+
+    .rating {
+      font-size: 0.8rem;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      
+      .stars { color: #fbbf24; letter-spacing: 1px; }
+      .count { color: #888; margin-left: 5px; }
+    }
+
+    .price-box {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+
+      .current-price {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #ef4444;
+      }
+      .old-price {
+        font-size: 0.85rem;
+        color: #999;
+        text-decoration: line-through;
+      }
+    }
+  }
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 10px;
+
+  .page-btn {
+    padding: 8px 15px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #555;
+
+    &:hover {
+      background: #f3f4f6;
+    }
+    
+    &.active {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+  }
+}
