@@ -1,0 +1,79 @@
+<div class="cart-container">
+  <div class="breadcrumb">
+    <a routerLink="/">Trang chủ</a> / <span class="current">Giỏ hàng</span>
+  </div>
+
+  <h1 class="page-title">Giỏ hàng của bạn</h1>
+
+  <div class="cart-content" *ngIf="cartItems.length > 0; else emptyCart">
+    <div class="cart-items">
+      <div class="cart-header">
+        <div class="col-product">Sản phẩm</div>
+        <div class="col-price">Đơn giá</div>
+        <div class="col-qty">Số lượng</div>
+        <div class="col-total">Thành tiền</div>
+        <div class="col-action"></div>
+      </div>
+
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="col-product">
+          <img [src]="item.product.imageUrl" [alt]="item.product.name">
+          <div class="info">
+            <a [routerLink]="['/product', item.product.slug]" class="name">{{ item.product.name }}</a>
+            <span class="variant" *ngIf="item.variant">{{ item.variant.color }} / {{ item.variant.size }}</span>
+          </div>
+        </div>
+        <div class="col-price">
+          {{ (item.variant?.price || item.product.discountPrice || item.product.price) | number:'1.0-0' }}đ
+        </div>
+        <div class="col-qty">
+          <div class="qty-box">
+            <button (click)="decreaseQty(item)">-</button>
+            <input type="number" [value]="item.quantity" readonly>
+            <button (click)="increaseQty(item)">+</button>
+          </div>
+        </div>
+        <div class="col-total font-bold">
+          {{ item.totalPrice | number:'1.0-0' }}đ
+        </div>
+        <div class="col-action">
+          <button class="btn-remove" (click)="removeItem(item)">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h3>Tổng đơn hàng</h3>
+      <div class="summary-row">
+        <span>Tạm tính:</span>
+        <span>{{ getSubtotal() | number:'1.0-0' }}đ</span>
+      </div>
+      
+      <div class="voucher-box">
+        <input type="text" #voucherInput placeholder="Mã giảm giá">
+        <button (click)="applyVoucher(voucherInput.value)">Áp dụng</button>
+      </div>
+
+      <div class="summary-row" *ngIf="discount > 0">
+        <span>Giảm giá:</span>
+        <span class="text-red">-{{ discount | number:'1.0-0' }}đ</span>
+      </div>
+
+      <div class="summary-row total">
+        <span>Tổng cộng:</span>
+        <span>{{ getTotal() | number:'1.0-0' }}đ</span>
+      </div>
+
+      <button class="btn-checkout" routerLink="/checkout">Tiến hành thanh toán</button>
+      <a routerLink="/products" class="btn-continue">Tiếp tục mua sắm</a>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-state">
+      <div class="icon">🛒</div>
+      <p>Giỏ hàng của bạn đang trống</p>
+      <a routerLink="/products" class="btn-primary">Mua sắm ngay</a>
+    </div>
+  </ng-template>
+</div>

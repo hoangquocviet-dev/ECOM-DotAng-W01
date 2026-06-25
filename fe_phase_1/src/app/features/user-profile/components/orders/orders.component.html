@@ -1,0 +1,37 @@
+<h2 class="section-title">Quản lý đơn hàng</h2>
+
+<div class="order-tabs">
+  <button *ngFor="let tab of tabs" 
+          [class.active]="activeTab === tab"
+          (click)="setTab(tab)">
+    {{ tab }}
+  </button>
+</div>
+
+<div class="order-list">
+  <div class="order-card" *ngFor="let order of orders">
+    <div class="order-header">
+      <div class="left">
+        <span class="order-id">#{{ order.id }}</span>
+        <span class="date">{{ order.date }}</span>
+      </div>
+      <div class="status" 
+           [class.delivering]="order.status === 'Đang giao'"
+           [class.success]="order.status === 'Đã giao'"
+           [class.canceled]="order.status === 'Đã hủy'">
+        {{ order.status }}
+      </div>
+    </div>
+    
+    <div class="order-body">
+      <div class="total-box">
+        <span class="label">Tổng tiền:</span>
+        <span class="total-price">{{ order.total | number:'1.0-0' }}đ</span>
+      </div>
+      <div class="actions">
+        <button class="btn-outline" [routerLink]="['/profile/orders', order.id]">Xem chi tiết</button>
+        <button class="btn-outline text-red" *ngIf="order.status === 'Chờ xử lý'">Hủy đơn</button>
+      </div>
+    </div>
+  </div>
+</div>

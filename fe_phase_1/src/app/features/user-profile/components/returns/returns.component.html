@@ -1,0 +1,28 @@
+<h2 class="section-title">Yêu cầu hoàn trả</h2>
+
+<div class="empty-state" *ngIf="returns.length === 0">
+  Bạn chưa có yêu cầu hoàn trả nào.
+</div>
+
+<div class="table-responsive" *ngIf="returns.length > 0">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Mã Yêu cầu</th>
+        <th>Mã Đơn hàng</th>
+        <th>Ngày gửi</th>
+        <th>Lý do</th>
+        <th>Trạng thái</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of returns">
+        <td><strong>{{ req.id }}</strong></td>
+        <td>{{ req.orderId }}</td>
+        <td>{{ req.date }}</td>
+        <td>{{ req.reason }}</td>
+        <td><span class="status-badge warning">{{ req.status }}</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

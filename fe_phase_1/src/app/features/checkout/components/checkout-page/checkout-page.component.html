@@ -1,0 +1,99 @@
+<div class="checkout-container">
+  <div class="breadcrumb">
+    <a routerLink="/">Trang chủ</a> / 
+    <a routerLink="/cart">Giỏ hàng</a> / 
+    <span class="current">Thanh toán</span>
+  </div>
+
+  <div class="checkout-layout">
+    <div class="checkout-form">
+      <h2>Thông tin nhận hàng</h2>
+      
+      <div class="form-group">
+        <label>Họ và tên</label>
+        <input type="text" placeholder="Nhập họ và tên">
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="Nhập email">
+        </div>
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input type="tel" placeholder="Nhập SĐT">
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>Địa chỉ</label>
+        <input type="text" placeholder="Nhập địa chỉ nhận hàng chi tiết">
+      </div>
+      
+      <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea placeholder="Ghi chú thêm về đơn hàng"></textarea>
+      </div>
+
+      <h2 class="mt-4">Phương thức giao hàng</h2>
+      <div class="shipping-methods">
+        <label class="radio-box active">
+          <input type="radio" name="shipping" checked>
+          <div class="radio-content">
+            <span class="title">Giao hàng tiêu chuẩn</span>
+            <span class="price">30.000đ</span>
+          </div>
+        </label>
+      </div>
+
+      <h2 class="mt-4">Phương thức thanh toán</h2>
+      <div class="payment-methods">
+        <label class="radio-box" [class.active]="paymentMethod === 'cod'">
+          <input type="radio" name="payment" (change)="setPaymentMethod('cod')" [checked]="paymentMethod === 'cod'">
+          <div class="radio-content">
+            <span class="title">Thanh toán khi nhận hàng (COD)</span>
+          </div>
+        </label>
+        <label class="radio-box" [class.active]="paymentMethod === 'momo'">
+          <input type="radio" name="payment" (change)="setPaymentMethod('momo')" [checked]="paymentMethod === 'momo'">
+          <div class="radio-content">
+            <span class="title">Thanh toán qua Ví MoMo</span>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="checkout-sidebar">
+      <h2>Đơn hàng của bạn ({{ cartItems.length }} sản phẩm)</h2>
+      
+      <div class="review-items">
+        <div class="r-item" *ngFor="let item of cartItems">
+          <img [src]="item.product.imageUrl" alt="">
+          <div class="r-info">
+            <div class="name">{{ item.product.name }}</div>
+            <div class="variant" *ngIf="item.variant">{{ item.variant.color }} / {{ item.variant.size }}</div>
+            <div class="qty">Số lượng: {{ item.quantity }}</div>
+          </div>
+          <div class="r-price">{{ item.totalPrice | number:'1.0-0' }}đ</div>
+        </div>
+      </div>
+
+      <div class="review-summary">
+        <div class="s-row">
+          <span>Tạm tính</span>
+          <span>{{ getSubtotal() | number:'1.0-0' }}đ</span>
+        </div>
+        <div class="s-row">
+          <span>Phí vận chuyển</span>
+          <span>{{ shippingFee | number:'1.0-0' }}đ</span>
+        </div>
+        <div class="s-row total">
+          <span>Tổng cộng</span>
+          <span>{{ getTotal() | number:'1.0-0' }}đ</span>
+        </div>
+      </div>
+
+      <button class="btn-place-order" (click)="placeOrder()">ĐẶT HÀNG</button>
+    </div>
+  </div>
+</div>

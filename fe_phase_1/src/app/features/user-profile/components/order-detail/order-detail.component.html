@@ -1,0 +1,55 @@
+<div class="header">
+  <button class="btn-back" routerLink="/profile/orders">← Quay lại danh sách</button>
+  <h2 class="section-title">Chi tiết đơn hàng #{{ orderId }}</h2>
+</div>
+
+<div class="order-status-box">
+  <h3>Trạng thái đơn hàng: <span class="text-green">Đang giao</span></h3>
+  <div class="timeline">
+    <div class="t-step active">1. Đặt hàng thành công</div>
+    <div class="t-step active">2. Đang xử lý</div>
+    <div class="t-step active">3. Đang giao hàng</div>
+    <div class="t-step">4. Giao thành công</div>
+  </div>
+</div>
+
+<div class="order-info-grid">
+  <div class="info-card">
+    <h3>Thông tin người nhận</h3>
+    <p><strong>Họ tên:</strong> Nguyễn Văn A</p>
+    <p><strong>Điện thoại:</strong> 0987654321</p>
+    <p><strong>Địa chỉ:</strong> 123 Đường Số 1, Quận 1, TP.HCM</p>
+  </div>
+  
+  <div class="info-card">
+    <h3>Hình thức thanh toán</h3>
+    <p>Thanh toán khi nhận hàng (COD)</p>
+  </div>
+</div>
+
+<div class="order-items">
+  <h3>Sản phẩm đã mua</h3>
+  <div class="item-list">
+    <div class="item">
+      <div class="name">Sổ tay bìa da cao cấp - Đen / Tiêu chuẩn</div>
+      <div class="qty">x2</div>
+      <div class="price">240.000đ</div>
+    </div>
+    <div class="item">
+      <div class="name">Bút máy luyện chữ đẹp</div>
+      <div class="qty">x1</div>
+      <div class="price">85.000đ</div>
+    </div>
+  </div>
+  
+  <div class="summary">
+    <div class="s-row"><span>Tạm tính:</span> <span>325.000đ</span></div>
+    <div class="s-row"><span>Phí vận chuyển:</span> <span>30.000đ</span></div>
+    <div class="s-row total"><span>Tổng cộng:</span> <span>355.000đ</span></div>
+  </div>
+</div>
+
+<div class="actions mt-4">
+  <button class="btn-primary">Tải hóa đơn PDF</button>
+  <button class="btn-outline text-red">Yêu cầu hoàn trả</button>
+</div>

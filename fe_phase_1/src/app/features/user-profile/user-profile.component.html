@@ -1,0 +1,30 @@
+<div class="profile-container">
+  <div class="breadcrumb">
+    <a routerLink="/">Trang chủ</a> / <span class="current">Hồ sơ cá nhân</span>
+  </div>
+
+  <div class="profile-layout">
+    <!-- Sidebar Menu -->
+    <aside class="profile-sidebar">
+      <div class="user-info">
+        <div class="avatar">U</div>
+        <div class="details">
+          <h3>Nguyễn Văn A</h3>
+          <span class="badge">Thành viên VIP</span>
+        </div>
+      </div>
+      <nav class="profile-nav">
+        <a routerLink="/profile/info" routerLinkActive="active">Thông tin tài khoản</a>
+        <a routerLink="/profile/orders" routerLinkActive="active">Quản lý đơn hàng</a>
+        <a routerLink="/profile/returns" routerLinkActive="active">Yêu cầu hoàn trả</a>
+        <a routerLink="/profile/wishlist" routerLinkActive="active">Sản phẩm yêu thích</a>
+        <a href="javascript:void(0)" class="logout">Đăng xuất</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="profile-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<h2 class="section-title">Sản phẩm yêu thích</h2>
+
+<div class="grid">
+  <div class="card" *ngFor="let item of items">
+    <img [src]="item.img" alt="">
+    <div class="info">
+      <h4>{{ item.name }}</h4>
+      <div class="price">{{ item.price | number:'1.0-0' }}đ</div>
+      <div class="actions">
+        <button class="btn-add">Thêm vào giỏ</button>
+        <button class="btn-del">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
