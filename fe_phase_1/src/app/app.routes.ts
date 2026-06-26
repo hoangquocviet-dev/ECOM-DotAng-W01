@@ -27,6 +27,14 @@ export const routes: Routes = [
         loadComponent: () => import('./features/checkout/components/checkout-page/checkout-page.component').then(m => m.CheckoutPageComponent)
       },
       {
+        path: 'order-success',
+        loadComponent: () => import('./features/checkout/components/order-success/order-success.component').then(m => m.OrderSuccessComponent)
+      },
+      {
+        path: 'order-failed',
+        loadComponent: () => import('./features/checkout/components/order-failed/order-failed.component').then(m => m.OrderFailedComponent)
+      },
+      {
         path: 'profile',
         loadChildren: () => import('./features/user-profile/user-profile.routes').then(m => m.USER_PROFILE_ROUTES)
       },

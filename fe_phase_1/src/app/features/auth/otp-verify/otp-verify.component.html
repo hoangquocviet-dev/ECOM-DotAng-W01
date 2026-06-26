@@ -1,6 +1,9 @@
 <div class="auth-container">
   <div class="auth-card">
     <h2>Xác Thực OTP</h2>
+    <p style="text-align: center; margin-bottom: 20px; color: #666;">
+      Mã OTP gồm 6 chữ số đã được gửi tới email <br><strong>{{ email }}</strong>
+    </p>
     
     <div class="error-alert" *ngIf="errorMessage">
       {{ errorMessage }}
@@ -8,28 +11,21 @@
 
     <form [formGroup]="otpForm" (ngSubmit)="onSubmit()">
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" formControlName="email" class="form-control" placeholder="Nhập email của bạn">
-        <div class="error-text" *ngIf="otpForm.get('email')?.touched && otpForm.get('email')?.invalid">
-          Vui lòng nhập địa chỉ email hợp lệ.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="otpCode">Mã OTP</label>
-        <input type="text" id="otpCode" formControlName="otpCode" class="form-control" placeholder="Nhập mã gồm 6 chữ số" maxlength="6">
-        <div class="error-text" *ngIf="otpForm.get('otpCode')?.touched && otpForm.get('otpCode')?.invalid">
-          Vui lòng nhập đúng 6 ký tự mã OTP.
+        <label for="otp">Mã xác thực</label>
+        <input type="text" id="otp" formControlName="otp" class="form-control" placeholder="Nhập mã gồm 6 số" maxlength="6">
+        <div class="error-text" *ngIf="otpForm.get('otp')?.touched && otpForm.get('otp')?.invalid">
+          Vui lòng nhập đúng mã OTP gồm 6 chữ số.
         </div>
       </div>
 
       <button type="submit" class="btn btn-primary" [disabled]="otpForm.invalid || isLoading">
-        {{ isLoading ? 'Đang xử lý...' : 'Xác nhận OTP' }}
+        {{ isLoading ? 'Đang kiểm tra...' : 'Xác Nhận' }}
       </button>
     </form>
 
     <div class="auth-links">
-      <a routerLink="/auth/login">Quay lại Đăng nhập</a>
+      <a routerLink="/auth/forgot-password">Gửi lại mã?</a>
+      <a routerLink="/auth/login"><i class="fas fa-arrow-left"></i> Quay lại đăng nhập</a>
     </div>
   </div>
 </div>

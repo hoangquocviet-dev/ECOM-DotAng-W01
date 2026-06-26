@@ -1,8 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,7 @@ export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
 
   registerForm: FormGroup = this.fb.group({
     name: ['', Validators.required],
@@ -32,17 +34,19 @@ export class RegisterComponent {
     this.isLoading = true;
     this.errorMessage = '';
 
-    this.authService.register(this.registerForm.value).subscribe({
-      next: (res) => {
-        this.isLoading = false;
-        // Chuyển tới trang đăng nhập hoặc xác thực OTP
-        this.router.navigate(['/auth/login']); 
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.errorMessage = 'Đăng ký thất bại. Vui lòng kiểm tra lại.';
-        console.error(err);
-      }
-    });
+    this.authService.register(this.registerForm.value)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          this.isLoading = false;
+          // Chuyển tới trang đăng nhập hoặc xác thực OTP
+          this.router.navigate(['/auth/login']); 
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = 'Đăng ký thất bại. Vui lòng kiểm tra lại.';
+          console.error(err);
+        }
+      });
   }
 }

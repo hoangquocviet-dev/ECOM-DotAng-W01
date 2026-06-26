@@ -1,0 +1,16 @@
+<div class="result-container">
+  <div class="result-card success">
+    <div class="icon-circle">
+      <i class="fas fa-check"></i>
+    </div>
+    <h2>Đặt Hàng Thành Công!</h2>
+    <p>Cảm ơn bạn đã mua sắm tại cửa hàng chúng tôi.</p>
+    <p>Mã đơn hàng của bạn là: <strong>{{ orderId }}</strong></p>
+    <p class="sub-text">Chúng tôi sẽ sớm liên hệ để xác nhận đơn hàng và tiến hành giao hàng.</p>
+    
+    <div class="action-buttons">
+      <button class="btn btn-outline" routerLink="/profile/orders/{{orderId}}">Xem Đơn Hàng</button>
+      <button class="btn btn-primary" routerLink="/">Tiếp Tục Mua Sắm</button>
+    </div>
+  </div>
+</div>
