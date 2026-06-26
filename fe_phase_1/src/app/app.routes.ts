@@ -32,6 +32,10 @@ export const routes: Routes = [
       },
       {
         path: '',
+        loadChildren: () => import('./features/cms/cms.routes').then(m => m.CMS_ROUTES)
+      },
+      {
+        path: '',
         loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
       }
     ]

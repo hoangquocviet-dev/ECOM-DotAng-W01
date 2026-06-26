@@ -1,0 +1,25 @@
+<div class="blogs-container">
+  <div class="blogs-header">
+    <h1>Tin Tức & Khuyến Mãi</h1>
+    <p>Cập nhật những thông tin mới nhất về xu hướng thời trang và các chương trình ưu đãi.</p>
+  </div>
+
+  <div class="blogs-grid">
+    @for (blog of blogs; track blog.id) {
+      <div class="blog-card" [routerLink]="['/blog', blog.slug]">
+        <div class="blog-thumbnail">
+          <img [src]="blog.thumbnail" [alt]="blog.title" loading="lazy">
+        </div>
+        <div class="blog-content">
+          <div class="blog-meta">
+            <span class="blog-date"><i class="fas fa-calendar-alt"></i> {{ blog.publishedDate | date:'dd/MM/yyyy' }}</span>
+            <span class="blog-author"><i class="fas fa-user"></i> {{ blog.author }}</span>
+          </div>
+          <h2 class="blog-title">{{ blog.title }}</h2>
+          <p class="blog-summary">{{ blog.summary }}</p>
+          <a class="read-more">Xem chi tiết <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+    }
+  </div>
+</div>
