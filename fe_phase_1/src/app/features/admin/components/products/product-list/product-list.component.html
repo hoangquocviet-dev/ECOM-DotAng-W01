@@ -1,0 +1,74 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Quản lý Sản phẩm</h1>
+    <a routerLink="/admin/products/create" class="btn btn-primary">
+      <span>+</span> Thêm sản phẩm mới
+    </a>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <input type="text" placeholder="Tìm kiếm sản phẩm..." class="form-control">
+    </div>
+    <div class="filter-actions">
+      <select class="form-control">
+        <option value="">Tất cả danh mục</option>
+        <option value="1">Áo Nam</option>
+        <option value="2">Quần Nam</option>
+      </select>
+      <select class="form-control">
+        <option value="">Trạng thái</option>
+        <option value="Active">Đang bán</option>
+        <option value="Inactive">Ngừng bán / Hết hàng</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Sản phẩm</th>
+            <th>Danh mục / Thương hiệu</th>
+            <th>Giá bán</th>
+            <th>Tồn kho</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of products; trackBy: trackById">
+            <td>#{{ product.id }}</td>
+            <td>
+              <div class="product-cell">
+                <img [src]="product.image" [alt]="product.name" class="product-img">
+                <span class="product-name">{{ product.name }}</span>
+              </div>
+            </td>
+            <td>
+              <div class="meta-info">
+                <span class="badge badge-light">{{ product.category }}</span>
+                <span class="badge badge-light">{{ product.brand }}</span>
+              </div>
+            </td>
+            <td class="text-success font-medium">{{ product.price | number }} ₫</td>
+            <td>{{ product.stock }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'badge-success': product.status === 'Active', 'badge-danger': product.status === 'Inactive'}">
+                {{ product.status }}
+              </span>
+            </td>
+            <td>
+              <div class="action-buttons">
+                <a [routerLink]="['/admin/products/edit', product.id]" class="btn-icon text-primary" title="Sửa">✏️</a>
+                <button class="btn-icon text-danger" title="Xóa">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

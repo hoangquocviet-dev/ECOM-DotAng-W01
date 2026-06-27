@@ -10,6 +10,26 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
       {
+        path: 'categories',
+        loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent)
+      },
+      {
+        path: 'brands',
+        loadComponent: () => import('./components/brands/brands.component').then(m => m.BrandsComponent)
+      },
+      {
+        path: 'products',
+        loadComponent: () => import('./components/products/product-list/product-list.component').then(m => m.ProductListComponent)
+      },
+      {
+        path: 'products/create',
+        loadComponent: () => import('./components/products/product-form/product-form.component').then(m => m.ProductFormComponent)
+      },
+      {
+        path: 'products/edit/:id',
+        loadComponent: () => import('./components/products/product-form/product-form.component').then(m => m.ProductFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

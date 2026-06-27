@@ -1,0 +1,137 @@
+<div class="page-container">
+  <div class="page-header">
+    <div class="title-group">
+      <a routerLink="/admin/products" class="btn-back">← Quay lại</a>
+      <h1 class="page-title">{{ isEditMode ? 'Sửa sản phẩm' : 'Thêm sản phẩm mới' }}</h1>
+    </div>
+    <div class="action-group">
+      <button class="btn btn-outline" routerLink="/admin/products">Hủy</button>
+      <button class="btn btn-primary" (click)="saveProduct()">Lưu sản phẩm</button>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <!-- Cột trái (Thông tin chính) -->
+    <div class="form-main">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Thông tin chung</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Tên sản phẩm <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" [(ngModel)]="product.name" placeholder="Nhập tên sản phẩm">
+          </div>
+          
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Danh mục <span class="text-danger">*</span></label>
+                <select class="form-control" [(ngModel)]="product.categoryId">
+                  <option value="">Chọn danh mục</option>
+                  <option value="1">Áo Nam</option>
+                  <option value="2">Quần Nam</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Thương hiệu <span class="text-danger">*</span></label>
+                <select class="form-control" [(ngModel)]="product.brandId">
+                  <option value="">Chọn thương hiệu</option>
+                  <option value="1">Nike</option>
+                  <option value="2">Adidas</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Giá và Tồn kho</h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <div class="form-group">
+                <label>Giá bán (VNĐ) <span class="text-danger">*</span></label>
+                <input type="number" class="form-control" [(ngModel)]="product.price">
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="form-group">
+                <label>Cảnh báo tồn kho thấp (LowStockThreshold)</label>
+                <input type="number" class="form-control" [(ngModel)]="product.lowStockThreshold">
+                <small class="form-text">Hệ thống sẽ cảnh báo khi số lượng nhỏ hơn mức này.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Mô tả sản phẩm</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <!-- Mocking Rich Text Editor with a simple textarea for now -->
+            <textarea class="form-control" rows="8" [(ngModel)]="product.description" placeholder="Nhập mô tả chi tiết..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Tối ưu SEO</h2>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label>Đường dẫn tĩnh (Slug)</label>
+            <input type="text" class="form-control" [(ngModel)]="product.slug" placeholder="vd: ao-thun-nam">
+          </div>
+          <div class="form-group">
+            <label>Meta Title</label>
+            <input type="text" class="form-control" [(ngModel)]="product.metaTitle">
+          </div>
+          <div class="form-group">
+            <label>Meta Description</label>
+            <textarea class="form-control" rows="3" [(ngModel)]="product.metaDescription"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cột phải (Hình ảnh, Settings) -->
+    <div class="form-sidebar">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Hình ảnh chính</h2>
+        </div>
+        <div class="card-body">
+          <div class="image-upload-box">
+            <img *ngIf="product.mainImage" [src]="product.mainImage" alt="Preview" class="img-preview">
+            <div class="upload-placeholder" *ngIf="!product.mainImage">
+              <i class="icon">📸</i>
+              <p>Click hoặc kéo thả ảnh vào đây</p>
+            </div>
+            <input type="file" class="hidden-file-input">
+          </div>
+          <p class="text-center mt-3"><a href="javascript:void(0)" class="text-primary">Thay đổi ảnh</a></p>
+        </div>
+      </div>
+      
+      <div class="card" *ngIf="isEditMode">
+        <div class="card-header">
+          <h2 class="card-title">Quản lý nâng cao</h2>
+        </div>
+        <div class="card-body">
+          <button class="btn btn-outline w-100 mb-3">Quản lý Biến thể (Variants)</button>
+          <button class="btn btn-outline w-100">Quản lý Ảnh phụ</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

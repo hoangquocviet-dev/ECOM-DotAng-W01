@@ -1,0 +1,70 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Quản lý Danh mục</h1>
+    <button class="btn btn-primary" (click)="openModal()">
+      <span>+</span> Thêm danh mục mới
+    </button>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Tên danh mục</th>
+            <th>Slug</th>
+            <th>Số SP</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of categories; trackBy: trackById">
+            <td>#{{ cat.id }}</td>
+            <td class="font-medium text-dark">{{ cat.name }}</td>
+            <td class="text-muted">{{ cat.slug }}</td>
+            <td><span class="badge badge-info">{{ cat.productCount }} SP</span></td>
+            <td>
+              <div class="action-buttons">
+                <button class="btn-icon text-primary" (click)="openModal(cat)" title="Sửa">✏️</button>
+                <button class="btn-icon text-danger" title="Xóa">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal overlay -->
+  <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">{{ isEditMode ? 'Sửa danh mục' : 'Thêm danh mục mới' }}</h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Tên danh mục</label>
+          <input type="text" class="form-control" [(ngModel)]="currentCategory.name" placeholder="Nhập tên danh mục">
+        </div>
+        <div class="form-group">
+          <label>Slug (Đường dẫn tĩnh)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentCategory.slug" placeholder="vd: ao-thun-nam">
+        </div>
+        <div class="form-group">
+          <label>Meta Title (SEO)</label>
+          <input type="text" class="form-control" [(ngModel)]="currentCategory.metaTitle" placeholder="Tiêu đề SEO">
+        </div>
+        <div class="form-group">
+          <label>Meta Description (SEO)</label>
+          <textarea class="form-control" rows="3" placeholder="Mô tả SEO"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" (click)="closeModal()">Hủy</button>
+        <button class="btn btn-primary" (click)="saveCategory()">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+</div>
