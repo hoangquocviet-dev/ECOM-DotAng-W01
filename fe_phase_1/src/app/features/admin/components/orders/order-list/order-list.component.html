@@ -1,0 +1,75 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1 class="page-title">Quản lý Đơn hàng</h1>
+    <button class="btn btn-primary">Xuất danh sách</button>
+  </div>
+
+  <div class="filter-bar">
+    <div class="search-box">
+      <input type="text" placeholder="Tìm theo mã đơn, khách hàng..." class="form-control">
+    </div>
+    <div class="filter-actions">
+      <select class="form-control" [(ngModel)]="filterStatus">
+        <option value="">Tất cả trạng thái</option>
+        <option value="Pending">Chờ xác nhận (Pending)</option>
+        <option value="Processing">Đang xử lý (Processing)</option>
+        <option value="Shipping">Đang giao hàng (Shipping)</option>
+        <option value="Completed">Đã hoàn thành (Completed)</option>
+        <option value="Cancelled">Đã hủy (Cancelled)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body p-0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Mã Đơn</th>
+            <th>Khách hàng</th>
+            <th>Ngày đặt</th>
+            <th>Tổng tiền</th>
+            <th>Thanh toán</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="orders$ | async as orders">
+            <tr *ngFor="let order of orders; trackBy: trackById">
+              <td><span class="fw-bold text-primary">#{{ order.orderCode }}</span></td>
+              <td>
+                <div class="meta-info">
+                  <span class="customer-name">{{ order.customerName }}</span>
+                  <span class="customer-phone">{{ order.customerPhone }}</span>
+                </div>
+              </td>
+              <td>{{ order.orderDate | date:'dd/MM/yyyy HH:mm' }}</td>
+              <td><span class="text-success font-medium">{{ order.totalAmount | number }} ₫</span></td>
+              <td>
+                <span class="badge" [ngClass]="{'badge-success': order.paymentStatus === 'Paid', 'badge-warning': order.paymentStatus === 'Unpaid'}">
+                  {{ order.paymentStatus === 'Paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
+                </span>
+                <span class="text-xs ms-1 text-muted">({{ order.paymentMethod }})</span>
+              </td>
+              <td>
+                <span class="badge status-badge" [ngClass]="{
+                  'status-pending': order.orderStatus === 'Pending',
+                  'status-processing': order.orderStatus === 'Processing',
+                  'status-shipping': order.orderStatus === 'Shipping',
+                  'status-completed': order.orderStatus === 'Completed',
+                  'status-cancelled': order.orderStatus === 'Cancelled'
+                }">
+                  {{ order.orderStatus }}
+                </span>
+              </td>
+              <td>
+                <a [routerLink]="['/admin/orders', order.id]" class="btn btn-outline btn-sm">Xem chi tiết</a>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

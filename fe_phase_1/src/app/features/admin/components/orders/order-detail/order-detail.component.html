@@ -1,0 +1,137 @@
+<div class="page-container" *ngIf="order$ | async as order">
+  <div class="page-header">
+    <div class="title-group">
+      <a routerLink="/admin/orders" class="btn-back">← Quay lại danh sách</a>
+      <h1 class="page-title">Đơn hàng #{{ order.orderCode }}</h1>
+      <span class="badge status-badge" [ngClass]="{
+        'status-pending': order.orderStatus === 'Pending',
+        'status-processing': order.orderStatus === 'Processing',
+        'status-shipping': order.orderStatus === 'Shipping',
+        'status-completed': order.orderStatus === 'Completed',
+        'status-cancelled': order.orderStatus === 'Cancelled'
+      }">{{ order.orderStatus }}</span>
+    </div>
+    <div class="action-group">
+      <button class="btn btn-outline" (click)="exportPDF(order.orderCode)">
+        <span>📄</span> Xuất Hóa đơn PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="layout-grid">
+    <!-- Left Column: Order Items & Payment -->
+    <div class="main-column">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Sản phẩm khách đặt</h2>
+        </div>
+        <div class="card-body p-0">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Sản phẩm</th>
+                <th>Đơn giá</th>
+                <th>Số lượng</th>
+                <th>Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of order.items">
+                <td>
+                  <div class="product-cell">
+                    <img [src]="item.image" [alt]="item.productName" class="product-img">
+                    <span class="product-name">{{ item.productName }}</span>
+                  </div>
+                </td>
+                <td>{{ item.price | number }} ₫</td>
+                <td>x{{ item.quantity }}</td>
+                <td class="fw-bold">{{ item.total | number }} ₫</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="order-summary">
+            <div class="summary-row">
+              <span>Tạm tính:</span>
+              <span>{{ order.totalAmount | number }} ₫</span>
+            </div>
+            <div class="summary-row">
+              <span>Phí vận chuyển:</span>
+              <span>0 ₫</span>
+            </div>
+            <div class="summary-row total">
+              <span>Tổng cộng:</span>
+              <span class="text-success">{{ order.totalAmount | number }} ₫</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card mt-4">
+        <div class="card-header">
+          <h2 class="card-title">Cập nhật Trạng thái đơn</h2>
+        </div>
+        <div class="card-body">
+          <div class="status-actions">
+            <button class="btn btn-outline" [disabled]="order.orderStatus === 'Pending'" (click)="updateStatus(order.id, 'Pending')">Chờ xác nhận</button>
+            <button class="btn btn-outline" [disabled]="order.orderStatus === 'Processing'" (click)="updateStatus(order.id, 'Processing')">Đang xử lý</button>
+            <button class="btn btn-outline" [disabled]="order.orderStatus === 'Shipping'" (click)="updateStatus(order.id, 'Shipping')">Đang giao hàng</button>
+            <button class="btn btn-primary" [disabled]="order.orderStatus === 'Completed'" (click)="updateStatus(order.id, 'Completed')">Hoàn thành</button>
+            <button class="btn btn-danger ms-auto" [disabled]="order.orderStatus === 'Cancelled'" (click)="updateStatus(order.id, 'Cancelled')">Hủy đơn</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Customer Info -->
+    <div class="side-column">
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Thông tin khách hàng</h2>
+        </div>
+        <div class="card-body">
+          <div class="info-group">
+            <label>Khách hàng</label>
+            <p class="fw-bold">{{ order.customerName }}</p>
+          </div>
+          <div class="info-group">
+            <label>Email</label>
+            <p>{{ order.customerEmail }}</p>
+          </div>
+          <div class="info-group">
+            <label>Số điện thoại</label>
+            <p>{{ order.customerPhone }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h2 class="card-title">Địa chỉ giao hàng</h2>
+        </div>
+        <div class="card-body">
+          <p class="address-text">{{ order.shippingAddress }}</p>
+        </div>
+      </div>
+
+      <div class="card mt-4">
+        <div class="card-header">
+          <h2 class="card-title">Thông tin thanh toán</h2>
+        </div>
+        <div class="card-body">
+          <div class="info-group">
+            <label>Phương thức</label>
+            <p>{{ order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng (COD)' : 'Ví MoMo' }}</p>
+          </div>
+          <div class="info-group">
+            <label>Trạng thái</label>
+            <p>
+              <span class="badge" [ngClass]="{'badge-success': order.paymentStatus === 'Paid', 'badge-warning': order.paymentStatus === 'Unpaid'}">
+                {{ order.paymentStatus === 'Paid' ? 'Đã thanh toán' : 'Chưa thanh toán' }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

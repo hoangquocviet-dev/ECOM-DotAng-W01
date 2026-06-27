@@ -10,6 +10,14 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent)
       },
       {
+        path: 'orders',
+        loadComponent: () => import('./components/orders/order-list/order-list.component').then(m => m.OrderListComponent)
+      },
+      {
+        path: 'orders/:id',
+        loadComponent: () => import('./components/orders/order-detail/order-detail.component').then(m => m.OrderDetailComponent)
+      },
+      {
         path: 'categories',
         loadComponent: () => import('./components/categories/categories.component').then(m => m.CategoriesComponent)
       },
