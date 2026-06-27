@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let brand of brands; trackBy: trackById">
+          <tr *ngFor="let brand of brands$ | async; trackBy: trackById">
             <td>#{{ brand.id }}</td>
             <td class="font-medium text-dark">{{ brand.name }}</td>
             <td class="text-muted">{{ brand.slug }}</td>

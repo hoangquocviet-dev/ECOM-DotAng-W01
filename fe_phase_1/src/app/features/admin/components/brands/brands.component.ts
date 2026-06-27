@@ -1,14 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Brand {
-  id: number;
-  name: string;
-  slug: string;
-  metaTitle: string;
-  productCount: number;
-}
+import { AdminBrandService, Brand } from '../../../../core/services/admin-brand.service';
 
 @Component({
   selector: 'app-brands',
@@ -19,11 +12,8 @@ interface Brand {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BrandsComponent {
-  brands: Brand[] = [
-    { id: 1, name: 'Nike', slug: 'nike', metaTitle: 'Giày Nike Chính Hãng', productCount: 120 },
-    { id: 2, name: 'Adidas', slug: 'adidas', metaTitle: 'Adidas Nam Nữ', productCount: 85 },
-    { id: 3, name: 'Puma', slug: 'puma', metaTitle: 'Thời trang Puma', productCount: 42 }
-  ];
+  private brandService = inject(AdminBrandService);
+  brands$ = this.brandService.getBrands();
 
   isModalOpen = false;
   isEditMode = false;

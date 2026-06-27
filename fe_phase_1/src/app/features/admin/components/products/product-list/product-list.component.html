@@ -39,7 +39,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let product of products; trackBy: trackById">
+          <tr *ngFor="let product of products$ | async; trackBy: trackById">
             <td>#{{ product.id }}</td>
             <td>
               <div class="product-cell">

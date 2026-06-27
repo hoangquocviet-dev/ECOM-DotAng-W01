@@ -1,14 +1,7 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Category {
-  id: number;
-  name: string;
-  slug: string;
-  metaTitle: string;
-  productCount: number;
-}
+import { AdminCategoryService, Category } from '../../../../core/services/admin-category.service';
 
 @Component({
   selector: 'app-categories',
@@ -19,11 +12,8 @@ interface Category {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CategoriesComponent {
-  categories: Category[] = [
-    { id: 1, name: 'Áo Nam', slug: 'ao-nam', metaTitle: 'Áo Nam Đẹp', productCount: 45 },
-    { id: 2, name: 'Quần Nam', slug: 'quan-nam', metaTitle: 'Quần Nam Thời Trang', productCount: 32 },
-    { id: 3, name: 'Phụ kiện', slug: 'phu-kien', metaTitle: 'Phụ kiện Nam Nữ', productCount: 18 }
-  ];
+  private categoryService = inject(AdminCategoryService);
+  categories$ = this.categoryService.getCategories();
 
   isModalOpen = false;
   isEditMode = false;

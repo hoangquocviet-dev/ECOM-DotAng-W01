@@ -19,7 +19,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let cat of categories; trackBy: trackById">
+          <tr *ngFor="let cat of categories$ | async; trackBy: trackById">
             <td>#{{ cat.id }}</td>
             <td class="font-medium text-dark">{{ cat.name }}</td>
             <td class="text-muted">{{ cat.slug }}</td>
