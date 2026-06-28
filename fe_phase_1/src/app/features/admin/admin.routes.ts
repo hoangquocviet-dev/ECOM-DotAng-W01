@@ -38,6 +38,14 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/products/product-form/product-form.component').then(m => m.ProductFormComponent)
       },
       {
+        path: 'return-requests',
+        loadComponent: () => import('./components/return-requests/return-requests.component').then(m => m.ReturnRequestsComponent)
+      },
+      {
+        path: 'reviews',
+        loadComponent: () => import('./components/reviews/reviews.component').then(m => m.ReviewsComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

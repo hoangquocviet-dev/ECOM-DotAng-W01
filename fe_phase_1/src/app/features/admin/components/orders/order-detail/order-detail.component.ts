@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 export class OrderDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private orderService = inject(AdminOrderService);
-  
+
   order$!: Observable<Order>;
 
   ngOnInit() {
@@ -26,9 +26,8 @@ export class OrderDetailComponent implements OnInit {
   }
 
   updateStatus(id: number, status: string) {
-    this.orderService.updateStatus(id, status).subscribe(() => {
+    this.orderService.updateOrderStatus(id, status).subscribe(() => {
       alert('Đã cập nhật trạng thái đơn hàng thành: ' + status);
-      // Ideally, trigger a refresh of order$ here via a BehaviorSubject or refetch.
       this.order$ = this.orderService.getOrderDetails(id);
     });
   }
