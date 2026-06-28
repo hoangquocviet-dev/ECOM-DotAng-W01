@@ -1,0 +1,83 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h2>Tạo Phiếu Nhập Kho Mới</h2>
+  </div>
+
+  <div class="form-container">
+    <div class="form-section">
+      <h3>1. Thông tin chung</h3>
+      <div class="form-group">
+        <label>Nhà Cung Cấp <span class="text-danger">*</span></label>
+        <select class="form-control" [(ngModel)]="selectedSupplierId">
+          <option value="">-- Chọn Nhà Cung Cấp --</option>
+          <option *ngFor="let s of suppliers" [value]="s.id">{{ s.name }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ghi chú</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="notes"></textarea>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>2. Chi tiết sản phẩm nhập</h3>
+      
+      <div class="add-item-box">
+        <div class="form-group">
+          <label>Tên Sản Phẩm</label>
+          <input type="text" class="form-control" [(ngModel)]="newItem.productName" placeholder="Tên sản phẩm">
+        </div>
+        <div class="form-group">
+          <label>Số lượng</label>
+          <input type="number" class="form-control" [(ngModel)]="newItem.quantity" min="1">
+        </div>
+        <div class="form-group">
+          <label>Đơn giá nhập</label>
+          <input type="number" class="form-control" [(ngModel)]="newItem.unitPrice" min="0">
+        </div>
+        <div class="form-group add-btn-container">
+          <button class="btn btn-secondary" (click)="addItem()" [disabled]="!newItem.productName || !newItem.quantity || !newItem.unitPrice">Thêm vào phiếu</button>
+        </div>
+      </div>
+
+      <table class="items-table" *ngIf="items.length > 0">
+        <thead>
+          <tr>
+            <th>Sản Phẩm</th>
+            <th>Số Lượng</th>
+            <th>Đơn Giá</th>
+            <th>Thành Tiền</th>
+            <th>Xóa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of items; let i = index">
+            <td>{{ item.productName }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.unitPrice | currency:'VND' }}</td>
+            <td>{{ item.totalPrice | currency:'VND' }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="removeItem(i)">X</button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="3" class="text-right"><strong>Tổng Cộng:</strong></td>
+            <td colspan="2"><strong>{{ totalAmount | currency:'VND' }}</strong></td>
+          </tr>
+        </tfoot>
+      </table>
+      <div *ngIf="items.length === 0" class="empty-items text-center">
+        Chưa có sản phẩm nào được chọn.
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-secondary" (click)="cancel()">Hủy & Quay Lại</button>
+      <button class="btn btn-primary" [disabled]="isSaving || !selectedSupplierId || items.length === 0" (click)="createOrder()">
+        {{ isSaving ? 'Đang tạo...' : 'Tạo Phiếu Nhập Kho' }}
+      </button>
+    </div>
+  </div>
+</div>

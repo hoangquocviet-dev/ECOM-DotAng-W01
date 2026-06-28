@@ -46,6 +46,18 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/reviews/reviews.component').then(m => m.ReviewsComponent)
       },
       {
+        path: 'suppliers',
+        loadComponent: () => import('./components/suppliers/suppliers.component').then(m => m.SuppliersComponent)
+      },
+      {
+        path: 'purchase-orders',
+        loadComponent: () => import('./components/purchase-orders/purchase-order-list/purchase-order-list.component').then(m => m.PurchaseOrderListComponent)
+      },
+      {
+        path: 'purchase-orders/create',
+        loadComponent: () => import('./components/purchase-orders/purchase-order-form/purchase-order-form.component').then(m => m.PurchaseOrderFormComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
