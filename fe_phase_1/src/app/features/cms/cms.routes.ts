@@ -16,5 +16,9 @@ export const CMS_ROUTES: Routes = [
   {
     path: 'privacy-policy',
     loadComponent: () => import('./privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+  },
+  {
+    path: 'return-policy',
+    loadComponent: () => import('./return-policy/return-policy.component').then(m => m.ReturnPolicyComponent)
   }
 ];
