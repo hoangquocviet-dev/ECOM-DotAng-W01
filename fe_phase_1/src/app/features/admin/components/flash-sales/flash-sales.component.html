@@ -1,0 +1,41 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h2>Quản lý Flash Sale</h2>
+    <button class="btn btn-primary">+ Thêm Flash Sale</button>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="isLoading" class="loading-state">
+      Đang tải dữ liệu...
+    </div>
+
+    <table *ngIf="!isLoading" class="admin-table">
+      <thead>
+        <tr>
+          <th>Mã</th>
+          <th>Tên Chiến Dịch</th>
+          <th>Thời gian Bắt đầu</th>
+          <th>Thời gian Kết thúc</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let fs of flashSales">
+          <td>{{ fs.id }}</td>
+          <td><strong>{{ fs.name }}</strong></td>
+          <td>{{ fs.startTime | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ fs.endTime | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-sm btn-info">Sửa</button>
+              <button class="btn btn-sm btn-danger">Xóa</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="flashSales.length === 0">
+          <td colspan="5" class="text-center">Chưa có Flash Sale nào.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

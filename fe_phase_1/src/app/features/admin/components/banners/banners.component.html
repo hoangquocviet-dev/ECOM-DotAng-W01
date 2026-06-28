@@ -1,0 +1,49 @@
+<div class="admin-page-container">
+  <div class="page-header">
+    <h2>Quản lý Banners (Sliders)</h2>
+    <button class="btn btn-primary">+ Thêm Banner</button>
+  </div>
+
+  <div class="table-container">
+    <div *ngIf="isLoading" class="loading-state">
+      Đang tải dữ liệu...
+    </div>
+
+    <table *ngIf="!isLoading" class="admin-table">
+      <thead>
+        <tr>
+          <th>Sắp Xếp</th>
+          <th>Hình Ảnh</th>
+          <th>Tiêu Đề</th>
+          <th>Đường Dẫn (Link)</th>
+          <th>Trạng Thái</th>
+          <th>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let b of banners">
+          <td class="text-center"><strong>{{ b.displayOrder }}</strong></td>
+          <td>
+            <img [src]="b.imageUrl" alt="Banner" class="banner-preview">
+          </td>
+          <td>{{ b.title }}</td>
+          <td>{{ b.linkUrl }}</td>
+          <td>
+            <span class="badge" [ngClass]="b.isActive ? 'badge-success' : 'badge-secondary'">
+              {{ b.isActive ? 'Hiển thị' : 'Đã ẩn' }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn btn-sm btn-info">Sửa</button>
+              <button class="btn btn-sm btn-danger">Xóa</button>
+            </div>
+          </td>
+        </tr>
+        <tr *ngIf="banners.length === 0">
+          <td colspan="6" class="text-center">Chưa có Banner nào.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

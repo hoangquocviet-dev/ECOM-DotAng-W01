@@ -58,6 +58,22 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/purchase-orders/purchase-order-form/purchase-order-form.component').then(m => m.PurchaseOrderFormComponent)
       },
       {
+        path: 'flash-sales',
+        loadComponent: () => import('./components/flash-sales/flash-sales.component').then(m => m.FlashSalesComponent)
+      },
+      {
+        path: 'vouchers',
+        loadComponent: () => import('./components/vouchers/vouchers.component').then(m => m.VouchersComponent)
+      },
+      {
+        path: 'combos',
+        loadComponent: () => import('./components/combos/combos.component').then(m => m.CombosComponent)
+      },
+      {
+        path: 'banners',
+        loadComponent: () => import('./components/banners/banners.component').then(m => m.BannersComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
