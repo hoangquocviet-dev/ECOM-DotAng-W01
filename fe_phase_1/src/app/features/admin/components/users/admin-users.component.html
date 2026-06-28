@@ -1,0 +1,58 @@
+<div class="admin-users-container">
+  <div class="page-header">
+    <div class="header-info">
+      <h2>Quản lý Người dùng</h2>
+      <p>Quản lý tài khoản khách hàng, nhân viên và phân quyền</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary">
+        <i class="fas fa-user-plus"></i> Thêm người dùng mới
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Người dùng</th>
+          <th>Vai trò (Role)</th>
+          <th>Ngày đăng ký</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (user of users$ | async; track trackById($index, user)) {
+          <tr>
+            <td>#{{ user.id }}</td>
+            <td class="col-user">
+              <strong>{{ user.fullName }}</strong>
+              <small>{{ user.email }}</small>
+            </td>
+            <td>
+              <span class="role-badge" [ngClass]="'role-' + user.role.toLowerCase()">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>{{ user.registeredAt | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'badge-active': user.status === 'Active', 'badge-locked': user.status === 'Locked'}">
+                {{ user.status }}
+              </span>
+            </td>
+            <td class="col-actions">
+              <button class="action-btn edit-btn" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+              <button class="action-btn lock-btn" title="Khóa/Mở khóa"><i class="fas fa-lock"></i></button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">Không có dữ liệu người dùng</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

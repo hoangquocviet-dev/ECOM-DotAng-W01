@@ -1,0 +1,54 @@
+<div class="admin-blogs-container">
+  <div class="page-header">
+    <div class="header-info">
+      <h2>Quản lý Blog</h2>
+      <p>Quản lý các bài viết trên hệ thống</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary">
+        <i class="fas fa-plus"></i> Thêm bài viết mới
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tiêu đề</th>
+          <th>Tác giả</th>
+          <th>Ngày tạo</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (blog of blogs$ | async; track trackById($index, blog)) {
+          <tr>
+            <td>#{{ blog.id }}</td>
+            <td class="col-title">
+              <strong>{{ blog.title }}</strong>
+              <small>{{ blog.slug }}</small>
+            </td>
+            <td>{{ blog.author }}</td>
+            <td>{{ blog.createdAt | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'badge-published': blog.status === 'Published', 'badge-draft': blog.status === 'Draft'}">
+                {{ blog.status }}
+              </span>
+            </td>
+            <td class="col-actions">
+              <button class="action-btn edit-btn" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+              <button class="action-btn delete-btn" title="Xóa"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">Không có dữ liệu bài viết</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

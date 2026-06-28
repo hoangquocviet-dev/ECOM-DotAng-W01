@@ -1,0 +1,53 @@
+<div class="admin-pages-container">
+  <div class="page-header">
+    <div class="header-info">
+      <h2>Trang Tĩnh (Static Pages)</h2>
+      <p>Quản lý nội dung các trang tĩnh như Giới thiệu, Chính sách, Điều khoản</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary">
+        <i class="fas fa-plus"></i> Thêm trang mới
+      </button>
+    </div>
+  </div>
+
+  <div class="table-card">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tiêu đề trang</th>
+          <th>Đường dẫn (Slug)</th>
+          <th>Lần cập nhật cuối</th>
+          <th>Trạng thái</th>
+          <th>Thao tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (page of pages$ | async; track trackById($index, page)) {
+          <tr>
+            <td>#{{ page.id }}</td>
+            <td class="col-title">
+              <strong>{{ page.title }}</strong>
+            </td>
+            <td><code>/{{ page.slug }}</code></td>
+            <td>{{ page.updatedAt | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <span class="badge" [ngClass]="{'badge-published': page.status === 'Published', 'badge-draft': page.status === 'Draft'}">
+                {{ page.status }}
+              </span>
+            </td>
+            <td class="col-actions">
+              <button class="action-btn edit-btn" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+              <button class="action-btn view-btn" title="Xem trước"><i class="fas fa-eye"></i></button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-state">Không có dữ liệu trang tĩnh</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

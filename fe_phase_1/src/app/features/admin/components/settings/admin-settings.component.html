@@ -1,0 +1,59 @@
+<div class="admin-settings-container">
+  <div class="page-header">
+    <div class="header-info">
+      <h2>Cấu hình Cửa hàng</h2>
+      <p>Quản lý các thông tin chung và thiết lập hệ thống</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-primary" (click)="saveSettings()">
+        <i class="fas fa-save"></i> Lưu thay đổi
+      </button>
+    </div>
+  </div>
+
+  @if (settings$ | async; as config) {
+    <div class="settings-grid">
+      <div class="settings-card">
+        <h3>Thông tin liên hệ</h3>
+        <div class="form-group">
+          <label>Tên cửa hàng</label>
+          <input type="text" class="form-control" [ngModel]="config.storeName">
+        </div>
+        <div class="form-group">
+          <label>Email hỗ trợ</label>
+          <input type="email" class="form-control" [ngModel]="config.contactEmail">
+        </div>
+        <div class="form-group">
+          <label>Số điện thoại</label>
+          <input type="text" class="form-control" [ngModel]="config.contactPhone">
+        </div>
+        <div class="form-group">
+          <label>Địa chỉ</label>
+          <textarea class="form-control" rows="3" [ngModel]="config.address"></textarea>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3>Thiết lập hệ thống</h3>
+        <div class="form-group">
+          <label>Đơn vị tiền tệ</label>
+          <select class="form-control" [ngModel]="config.currency">
+            <option value="VND">Việt Nam Đồng (VND)</option>
+            <option value="USD">Đô la Mỹ (USD)</option>
+          </select>
+        </div>
+        
+        <div class="form-group toggle-group">
+          <label>Chế độ bảo trì</label>
+          <label class="switch">
+            <input type="checkbox" [ngModel]="config.maintenanceMode">
+            <span class="slider round"></span>
+          </label>
+          <small class="help-text">Bật chế độ này sẽ tạm ngưng truy cập của khách hàng</small>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="loading-state">Đang tải cấu hình...</div>
+  }
+</div>

@@ -74,6 +74,22 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./components/banners/banners.component').then(m => m.BannersComponent)
       },
       {
+        path: 'blogs',
+        loadComponent: () => import('./components/blogs/admin-blogs.component').then(m => m.AdminBlogsComponent)
+      },
+      {
+        path: 'pages',
+        loadComponent: () => import('./components/pages/admin-pages.component').then(m => m.AdminPagesComponent)
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./components/users/admin-users.component').then(m => m.AdminUsersComponent)
+      },
+      {
+        path: 'settings',
+        loadComponent: () => import('./components/settings/admin-settings.component').then(m => m.AdminSettingsComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
