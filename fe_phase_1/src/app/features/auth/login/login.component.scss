@@ -102,3 +102,70 @@
     }
   }
 }
+
+.social-login {
+  margin-top: 1.5rem;
+
+  .divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #888;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+
+    &::before,
+    &::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #ddd;
+    }
+
+    &:not(:empty)::before {
+      margin-right: .5em;
+    }
+
+    &:not(:empty)::after {
+      margin-left: .5em;
+    }
+  }
+
+  .social-buttons {
+    display: flex;
+    gap: 1rem;
+
+    .btn-social {
+      flex: 1;
+      padding: 0.6rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      background: white;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+
+      &.btn-google {
+        color: #db4437;
+        border-color: #db4437;
+        &:hover {
+          background-color: #fff0ef;
+        }
+      }
+
+      &.btn-facebook {
+        color: #4267B2;
+        border-color: #4267B2;
+        &:hover {
+          background-color: #f0f4fb;
+        }
+      }
+    }
+  }
+}

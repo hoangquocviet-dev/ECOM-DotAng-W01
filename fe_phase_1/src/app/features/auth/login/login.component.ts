@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -49,5 +50,15 @@ export class LoginComponent {
         this.errorMessage = 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
       }
     });
+  }
+
+  loginWithGoogle(): void {
+    // Redirect to backend OAuth2 Google endpoint
+    window.location.href = `${environment.apiUrl}/Users/auth/google`;
+  }
+
+  loginWithFacebook(): void {
+    // Redirect to backend OAuth2 Facebook endpoint
+    window.location.href = `${environment.apiUrl}/Users/auth/facebook`;
   }
 }

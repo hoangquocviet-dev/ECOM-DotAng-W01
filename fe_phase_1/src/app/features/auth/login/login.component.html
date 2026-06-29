@@ -28,6 +28,20 @@
       </button>
     </form>
 
+    <div class="social-login">
+      <div class="divider">
+        <span>Hoặc đăng nhập bằng</span>
+      </div>
+      <div class="social-buttons">
+        <button type="button" class="btn-social btn-google" (click)="loginWithGoogle()">
+          Google
+        </button>
+        <button type="button" class="btn-social btn-facebook" (click)="loginWithFacebook()">
+          Facebook
+        </button>
+      </div>
+    </div>
+
     <div class="auth-links">
       <a routerLink="/auth/register">Chưa có tài khoản? Đăng ký ngay</a>
       <a routerLink="/auth/forgot-password">Quên mật khẩu?</a>

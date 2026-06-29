@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, Validators, FormGroup } from '@angula
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -48,5 +49,13 @@ export class RegisterComponent {
           console.error(err);
         }
       });
+  }
+
+  loginWithGoogle(): void {
+    window.location.href = `${environment.apiUrl}/Users/auth/google`;
+  }
+
+  loginWithFacebook(): void {
+    window.location.href = `${environment.apiUrl}/Users/auth/facebook`;
   }
 }
