@@ -128,10 +128,72 @@
           <h2 class="card-title">Quản lý nâng cao</h2>
         </div>
         <div class="card-body">
-          <button class="btn btn-outline w-100 mb-3">Quản lý Biến thể (Variants)</button>
-          <button class="btn btn-outline w-100">Quản lý Ảnh phụ</button>
+          <button class="btn btn-outline w-100 mb-3" (click)="openVariantModal()">Quản lý Biến thể (Variants)</button>
+          <button class="btn btn-outline w-100" (click)="openImagesModal()">Quản lý Ảnh phụ</button>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Variants -->
+<div class="modal-overlay" *ngIf="isVariantModalOpen">
+  <div class="modal-content modal-lg">
+    <div class="modal-header">
+      <h2>Quản lý Biến thể Sản phẩm</h2>
+      <button class="btn-close" (click)="closeVariantModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <table class="table-variants">
+        <thead>
+          <tr>
+            <th>Màu sắc</th>
+            <th>Kích thước</th>
+            <th>Số lượng tồn</th>
+            <th>Giá chênh lệch</th>
+            <th>SKU</th>
+            <th>Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let v of variants; let i = index">
+            <td><input type="text" class="form-control" [(ngModel)]="v.color" placeholder="vd: Đỏ"></td>
+            <td><input type="text" class="form-control" [(ngModel)]="v.size" placeholder="vd: XL"></td>
+            <td><input type="number" class="form-control" [(ngModel)]="v.stock"></td>
+            <td><input type="number" class="form-control" [(ngModel)]="v.priceOffset"></td>
+            <td><input type="text" class="form-control" [(ngModel)]="v.sku"></td>
+            <td><button class="btn btn-danger btn-sm" (click)="removeVariant(i)">Xóa</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <button class="btn btn-outline mt-3" (click)="addVariant()">+ Thêm biến thể</button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="closeVariantModal()">Hoàn tất</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Images -->
+<div class="modal-overlay" *ngIf="isImagesModalOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Quản lý Ảnh Phụ</h2>
+      <button class="btn-close" (click)="closeImagesModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="image-grid">
+        <div class="image-item" *ngFor="let img of additionalImages; let i = index">
+          <img [src]="img" alt="Ảnh phụ">
+          <button class="btn-remove-img" (click)="removeImage(i)">&times;</button>
+        </div>
+        <div class="image-item add-new" (click)="addImage()">
+          <span class="icon">+</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" (click)="closeImagesModal()">Hoàn tất</button>
     </div>
   </div>
 </div>
