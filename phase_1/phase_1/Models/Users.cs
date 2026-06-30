@@ -18,5 +18,7 @@ namespace phase_1.Models
         public decimal TotalSpent { get; set; } = 0;
         public int RewardPoints { get; set; } = 0;
         public string MemberTier { get; set; } = "Bronze";
+        public string ReferralCode { get; set; } = string.Empty;
+        public int? ReferredById { get; set; }
     }
 }

@@ -40,6 +40,20 @@ namespace phase_1.Controllers
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
             Random random = new Random();
             string otp = random.Next(100000, 999999).ToString();
+            
+            int? referredById = null;
+            if (!string.IsNullOrEmpty(request.ReferralCode))
+            {
+                var referrer = await _context.Users.FirstOrDefaultAsync(u => u.ReferralCode == request.ReferralCode);
+                if (referrer != null)
+                {
+                    referredById = referrer.Id;
+                    referrer.RewardPoints += 50;
+                }
+            }
+            
+            string newReferralCode = request.Username.ToUpper() + random.Next(100, 999).ToString();
+
             var user = new phase_1.Models.Users
             {
                 Username = request.Username,
@@ -47,7 +61,10 @@ namespace phase_1.Controllers
                 Name = request.Name,
                 Email = request.Email,
                 Role = "User",
-                OtpCode = otp
+                OtpCode = otp,
+                ReferralCode = newReferralCode,
+                ReferredById = referredById,
+                RewardPoints = referredById.HasValue ? 50 : 0 
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

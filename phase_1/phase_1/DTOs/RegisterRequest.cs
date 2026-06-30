@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 
 namespace phase_1.DTOs
 {
@@ -8,5 +8,6 @@ namespace phase_1.DTOs
         public string Password { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; }
+        public string? ReferralCode { get; set; }
     }
 }

@@ -48,7 +48,9 @@ namespace phase_1.Controllers
                 user.Role,
                 user.TotalSpent,
                 user.RewardPoints,
-                user.MemberTier
+                user.MemberTier,
+                user.ReferralCode,
+                user.ReferredById
             });
         }
 
@@ -70,7 +72,9 @@ namespace phase_1.Controllers
                 user.Role,
                 user.TotalSpent,
                 user.RewardPoints,
-                user.MemberTier
+                user.MemberTier,
+                user.ReferralCode,
+                user.ReferredById
             });
         }
 
@@ -102,7 +106,9 @@ namespace phase_1.Controllers
                 u.IsLocked,
                 u.TotalSpent,
                 u.RewardPoints,
-                u.MemberTier
+                u.MemberTier,
+                u.ReferralCode,
+                u.ReferredById
             });
             return Ok(response);
         }
