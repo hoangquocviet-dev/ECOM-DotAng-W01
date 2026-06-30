@@ -57,3 +57,72 @@
 
   &:hover { background: #1d4ed8; }
 }
+
+.affiliate-container {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+
+  .affiliate-stats {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+
+    .stat-card {
+      flex: 1;
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      .label {
+        font-size: 0.85rem;
+        color: #64748b;
+      }
+      .value {
+        font-size: 1.25rem;
+        font-weight: 700;
+        
+        &.points { color: #f59e0b; }
+      }
+      .badge {
+        align-self: flex-start;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: white;
+        &.gold { background: linear-gradient(45deg, #fbbf24, #d97706); }
+      }
+    }
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+
+    input { flex: 1; }
+    .btn-copy {
+      padding: 0 20px;
+      background: #0f172a;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+
+      &:hover { background: #334155; }
+    }
+  }
+
+  small {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+  }
+}

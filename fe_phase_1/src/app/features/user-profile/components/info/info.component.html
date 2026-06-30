@@ -1,25 +1,25 @@
 <h2 class="section-title">Thông tin tài khoản</h2>
-
-<div class="form-container">
+<div *ngIf="isLoading">Đang tải dữ liệu...</div>
+<div class="form-container" *ngIf="!isLoading && userProfile">
   <div class="form-row">
     <div class="form-group">
       <label>Họ và tên</label>
-      <input type="text" value="Nguyễn Văn A">
+      <input type="text" [value]="userProfile.name">
     </div>
     <div class="form-group">
       <label>Số điện thoại</label>
-      <input type="tel" value="0987654321">
+      <input type="tel" [value]="userProfile.phoneNumber">
     </div>
   </div>
 
   <div class="form-group">
     <label>Email</label>
-    <input type="email" value="nguyenvana@gmail.com" readonly class="readonly">
+    <input type="email" [value]="userProfile.email" readonly class="readonly">
   </div>
 
   <div class="form-group">
     <label>Địa chỉ</label>
-    <input type="text" value="123 Đường Số 1, Quận 1, TP.HCM">
+    <input type="text" [value]="userProfile.address">
   </div>
 
   <button class="btn-save">Lưu thay đổi</button>
@@ -40,4 +40,27 @@
     <input type="password" placeholder="Xác nhận mật khẩu mới">
   </div>
   <button class="btn-save">Cập nhật mật khẩu</button>
+</div>
+
+<h2 class="section-title mt-5">Chương trình Giới thiệu (Affiliate)</h2>
+<div class="form-container affiliate-container" *ngIf="!isLoading && userProfile">
+  <div class="affiliate-stats">
+    <div class="stat-card">
+      <span class="label">Hạng thành viên</span>
+      <span class="value badge" [ngClass]="{'gold': userProfile.memberTier === 'VIP' || userProfile.memberTier === 'Gold'}">{{ userProfile.memberTier }}</span>
+    </div>
+    <div class="stat-card">
+      <span class="label">Điểm thưởng</span>
+      <span class="value points">{{ userProfile.rewardPoints }} pts</span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label>Mã giới thiệu của bạn</label>
+    <div class="input-group">
+      <input type="text" [value]="userProfile.referralCode" readonly class="readonly">
+      <button class="btn-copy" (click)="copyReferralCode()">Copy Mã</button>
+    </div>
+    <small>Chia sẻ mã này cho bạn bè. Khi họ đăng ký, cả hai sẽ nhận được 50 điểm thưởng!</small>
+  </div>
 </div>
