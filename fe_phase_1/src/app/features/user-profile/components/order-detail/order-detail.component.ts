@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute } from '@angular/router';
+import { OrderService, UserOrder } from '../../services/order.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-order-detail',
@@ -11,10 +13,15 @@ import { RouterModule, ActivatedRoute } from '@angular/router';
 })
 export class OrderDetailComponent implements OnInit {
   orderId: string = '';
+  order$: Observable<UserOrder | undefined> | null = null;
   
-  constructor(private route: ActivatedRoute) {}
+  private route = inject(ActivatedRoute);
+  private orderService = inject(OrderService);
   
   ngOnInit() {
     this.orderId = this.route.snapshot.paramMap.get('id') || '';
+    if (this.orderId) {
+      this.order$ = this.orderService.getOrderById(this.orderId);
+    }
   }
 }

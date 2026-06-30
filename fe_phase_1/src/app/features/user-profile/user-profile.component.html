@@ -3,14 +3,14 @@
     <a routerLink="/">Trang chủ</a> / <span class="current">Hồ sơ cá nhân</span>
   </div>
 
-  <div class="profile-layout">
+  <div class="profile-layout" *ngIf="userProfile$ | async as profile">
     <!-- Sidebar Menu -->
     <aside class="profile-sidebar">
       <div class="user-info">
-        <div class="avatar">U</div>
+        <div class="avatar">{{ getInitials(profile.name) }}</div>
         <div class="details">
-          <h3>Nguyễn Văn A</h3>
-          <span class="badge">Thành viên VIP</span>
+          <h3>{{ profile.name }}</h3>
+          <span class="badge" [ngClass]="{'gold': profile.memberTier === 'VIP' || profile.memberTier === 'Gold'}">{{ profile.memberTier }}</span>
         </div>
       </div>
       <nav class="profile-nav">
